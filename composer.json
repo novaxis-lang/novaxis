@@ -1,0 +1,21 @@
+{
+	"name": "novaxis-language/novaxis",
+	"description": "A simple programming language",
+	"type": "library",
+	"license": "CC-BY-NC-ND-4.0",
+	"version": "1.6.2",
+	"autoload": {
+		"psr-4": {
+			"Novaxis\\": "src/"
+		}
+	},
+	"require": {
+		"php": ">=8.1.14",
+		"symfony/expression-language": "^6.3",
+		"symfony/yaml": "^6.3",
+		"sabre/xml": "^4.0",
+		"laminas/laminas-config": "^2.5"
+	},
+	"scripts": {},
+	"bin": ["bin/novaxis"]
+}

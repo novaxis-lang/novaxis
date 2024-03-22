@@ -1,0 +1,10 @@
+? auto
+users
+	i1
+		name: "John Doe"
+		email: "john.doe@example.com"
+		roles: ["admin", "user"]
+	i2
+		name: "Jane Smith"
+		email: "jane.smith@example.com"
+		roles: ["user"]

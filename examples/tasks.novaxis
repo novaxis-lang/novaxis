@@ -1,0 +1,10 @@
+? auto
+tasks
+	i1
+		title: "Finish the report"
+		due_date: "2024-03-20"
+		completed: false
+	i2
+		title: "Call the supplier"
+		due_date: "2024-03-22"
+		completed: true

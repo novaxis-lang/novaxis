@@ -1,0 +1,13 @@
+? auto
+server
+	host: "127.0.0.1"
+	username: "user"
+	password: "pass"
+	port: 8080
+
+database
+	host: "localhost"
+	port: 3306
+	username: "{server.username}"
+	password: "{server.password}"
+	name: "app_db"
