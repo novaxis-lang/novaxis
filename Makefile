@@ -16,6 +16,7 @@ install:
 	@if [ ! -f "$(COMMAND_BIN_PATH)" ]; then \
 		if [ -f "$(LOCAL_COMMAND_BIN_PATH)" ]; then \
 			echo "Creating symlink for $(COMMAND_NAME) in /bin"; \
+			ln -s $(LOCAL_COMMAND_BIN_PATH) $(COMMAND_BIN_PATH); \
 			echo "Novaxis installed successfully."; \
 		else \
 			echo "Local command binary does not exist: $(LOCAL_COMMAND_BIN_PATH)"; \
