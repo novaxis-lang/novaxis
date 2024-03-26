@@ -42,7 +42,7 @@ class Tabs {
      * @param string $line The input line to check for tabs.
      * @return int The number of tabs at the beginning of the line.
      */
-	function getTabCountInLine($line) {
+	public function getTabCountInLine($line) {
 		$pattern = '/^(\t*|\s*)\S/';
 	
 		if (preg_match($pattern, $line, $matches)) {
