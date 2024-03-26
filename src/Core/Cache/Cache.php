@@ -13,16 +13,16 @@ class Cache {
 	/**
      * The path to the cache file.
      *
-     * @var string
+     * @var ?string
      */
-	private $cacheFile;
+	private ?string $cacheFile;
 	
 	/**
      * The default cache file path if not specified.
      *
      * @var string
      */
-	private $defaultCacheFilePath = __DIR__ . '/cache_data.dat';
+	private string $defaultCacheFilePath = __DIR__ . '/cache_data.dat';
 
 	/**
      * Cache constructor.
