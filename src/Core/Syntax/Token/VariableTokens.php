@@ -23,7 +23,7 @@ trait VariableTokens {
 	const INTERPOLATION_OPEN = ['{'];
 
 	/**
-	 * The interpolation open token.
+	 * The interpolation close token.
 	 */
 	const INTERPOLATION_CLOSE = ['}'];
 
