@@ -1,0 +1,4 @@
+? Byte
+total_storage_space = 1TB // 1024GB
+used_storage_space = 810GB
+free_storage_space = 1TB - 810GB // 214GB
