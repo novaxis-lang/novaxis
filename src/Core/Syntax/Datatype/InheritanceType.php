@@ -1,5 +1,5 @@
 <?php
-namespace NOVAXIS\Core\Syntax\Datatype;
+namespace Novaxis\Core\Syntax\Datatype;
 
 use Novaxis\Core\Path;
 use Novaxis\Core\Syntax\Token\PathTokens;
