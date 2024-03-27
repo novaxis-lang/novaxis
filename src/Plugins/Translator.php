@@ -1,5 +1,6 @@
 <?php
 namespace Novaxis\Plugins;
+
 use Novaxis\Core\Syntax\Token\PathTokens;
 use Novaxis\Core\Path;
 
