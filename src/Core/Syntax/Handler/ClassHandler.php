@@ -1,5 +1,6 @@
 <?php
 namespace Novaxis\Core\Syntax\Handler;
+
 use Novaxis\Core\Syntax\Handler\Namingrules;
 
 /**
