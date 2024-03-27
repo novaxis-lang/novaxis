@@ -3,8 +3,8 @@ status: "success"
 code: 200
 message: "Data retrieved successfully"
 data
-	city = "San Francisco"
+	city: "San Francisco"
 	temperature
-		current = 11
-		high = 14
-		low = 11
+		current: 11
+		high: 14
+		low: 11
