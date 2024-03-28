@@ -1,0 +1,3 @@
+? Number
+Foo
+	variable: 0 // Based on inheritance datatype, the datatype is Number
