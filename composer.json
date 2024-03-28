@@ -3,7 +3,7 @@
 	"description": "A simple programming language",
 	"type": "library",
 	"license": "CC-BY-NC-ND-4.0",
-	"version": "1.6.3",
+	"version": "1.6.4",
 	"autoload": {
 		"psr-4": {
 			"Novaxis\\": "src/"

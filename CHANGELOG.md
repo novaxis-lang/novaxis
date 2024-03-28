@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.4] - 2024-03-28
+
+### Added
+- [tests](tests/) folder containing Novaxis codes for ensuring the project's functionality.
+- New examples in the [examples](examples/) folder to demonstrate project usage.
+- `reinstall` target in the Makefile for easily refreshing the installation.
+
+### Fixed
+- Various files for enhanced stability and performance.
+- Makefile enhancements for improved build and installation processes.
+
 ## [1.6.3] - 2024-03-25
 
 ### Added

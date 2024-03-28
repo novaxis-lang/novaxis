@@ -1,4 +1,4 @@
-sandbox/
-vendor/
+/sandbox/
+/vendor/
 
-composer.lock
+/composer.lock
