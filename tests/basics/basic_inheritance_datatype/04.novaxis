@@ -1,0 +1,6 @@
+? Number
+Foo
+	0_variable: 0 // Based on inheritance datatype, the datatype is Number
+	? String
+	Bar
+		1_variable: "Based on inheritance datatype, the datatype is String"
