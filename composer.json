@@ -1,6 +1,6 @@
 {
 	"name": "novaxis-language/novaxis",
-	"description": "A simple programming language",
+	"description": "A configuration programming language",
 	"type": "library",
 	"license": "CC-BY-NC-ND-4.0",
 	"version": "1.6.4",
