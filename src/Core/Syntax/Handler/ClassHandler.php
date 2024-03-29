@@ -37,7 +37,7 @@ class ClassHandler {
 	 */
 	public function isClass($input) {
 		preg_match($this -> pattern, $input, $matches);
-		return isset($matches[2]) && $this -> Namingrules -> isValid(trim($matches[2]), false);
+		return isset($matches[2]) && $this -> Namingrules -> isValid(trim($matches[2]), false); // isValid(trim($matches[2]), false);
 	}
 
 	/**

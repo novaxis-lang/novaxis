@@ -20,6 +20,7 @@ use Novaxis\Core\Runner;
 use Novaxis\Config\Utils;
 use Novaxis\Plugins\Translator;
 
+
 $Translator = new Translator();
 $options = getopt("f:v", array("filename:", "get:", "print", "path", "help", "version"));
 
@@ -31,9 +32,10 @@ else if (isset($options["version"]) || isset($options["v"]) || empty($options)) 
 }
 else if (isset($options["f"]) || isset($options["filename"])) {
 	$filename = isset($options["f"]) ? $options["f"] : $options["filename"];
+	define('__REQ_DIR__', realpath(trim(shell_exec("pwd")) . "/" . dirname($filename)));
 	$result = null;
 	$start = microtime(true);
-	$novaxis = new Runner("$filename");
+	$novaxis = new Runner("$filename", null, __REQ_DIR__);
 
 	$execute = $novaxis -> execute(null);
 	if (isset($options["get"])) {

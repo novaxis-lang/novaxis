@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0-beta] - 2024-03-29
+
+### Added
+- The ability to import configuration Novaxis files, enhancing project setup and customization flexibility.
+
+### Changed
+- The keyword for representing the current class has been changed from `.self` to `self`, aligning with common programming conventions.
+- Updated naming rules to enforce clarity and prevent conflicts. Specifically, `self` has been reserved and cannot be used as a name for classes, variables, or aliases.
+
+### Fixed
+- Improvements in `bin/novaxis` for better reliability and performance.
+- Several syntax improvements, refining the language for ease of use and understanding.
+
+### Note
+- This is a beta release and might contain unresolved issues. Users are encouraged to provide feedback and report any encountered bugs.
+
 ## [1.6.4] - 2024-03-28
 
 ### Added

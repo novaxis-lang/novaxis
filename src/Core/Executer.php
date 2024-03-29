@@ -6,7 +6,8 @@ use Novaxis\Core\Syntax\Handler\{
 	ClassHandler,
 	CommentHandler,
 	DatatypeHandler,
-	VariableHandler
+	VariableHandler,
+	Configuring\ImportHandler
 };
 use Novaxis\Core\Syntax\Handler\Variable\{
 	Interpolation,
@@ -51,6 +52,8 @@ class Executer {
 	 * @var VariableHandler The VariableHandler instance for handling variable syntax.
 	 */
 	private VariableHandler $VariableHandler;
+
+	private ImportHandler $ImportHandler;
 
 	/**
 	 * @var InheritanceType The InheritanceType instance for managing inheritance.
@@ -104,13 +107,14 @@ class Executer {
 	 *
 	 * @param Path $Path An instance of the Path class used for managing the path and navigating the nested structure of items.
 	 */
-	public function __construct(Path $Path, ?string $filename = null) {
+	public function __construct(Path $Path, ?string $filename = null, $req_shell_path) {
 		$this -> Tabs = new Tabs;
 		$this -> Path = $Path;
 		$this -> ClassHandler = new ClassHandler;
 		$this -> CommentHandler = new CommentHandler;
 		$this -> DatatypeHandler = new DatatypeHandler;
 		$this -> VariableHandler = new VariableHandler;
+		$this -> ImportHandler = new ImportHandler($req_shell_path);
 		$this -> InheritanceType = new InheritanceType;
 		$this -> listCounter = new listCounter;
 		$this -> Interpolation = new Interpolation;
@@ -347,6 +351,15 @@ class Executer {
 		}
 	}
 
+	public function executiveImporting($currentLine, $oldcurrentline, int $lineNumber) {
+		if ($this -> ImportHandler -> isImporting($currentLine)) {
+			$elements = $this -> ImportHandler -> handle($currentLine, $path = $this -> Path -> clean($this -> Path -> getFullPath()));
+			$this -> ElementsLines[$this -> Path -> getFullPath()] = array("Import", $this -> ImportHandler -> getTargetFile($currentLine), $currentLine, $oldcurrentline, $lineNumber);
+			$this -> Path -> addItems($elements);
+			return $this -> Path -> getItems();
+		}
+	}
+
 	/**
 	 * Execute various parts of code handling based on the given current line.
 	 *
@@ -361,6 +374,8 @@ class Executer {
 			return $this -> executiveVariable($currentLine, $oldcurrentline, $lineNumber);
 		} elseif ($mode == 'classbox') {
 			return $this -> executiveClassbox($currentLine, $oldcurrentline, $lineNumber);
+		} elseif ($mode == 'importing') {
+			return $this -> executiveImporting($currentLine, $oldcurrentline, $lineNumber);
 		} elseif ($mode == 'class') {
 			return $this -> executiveClass($currentLine, $oldcurrentline, $values, $lineNumber);
 		} else {
@@ -421,6 +436,9 @@ class Executer {
 		
 		if ($this -> VariableHandler -> isVariable($currentLine) && empty($return)) {
 			$return = $this -> executiveParts($currentLine, $oldcurrentline, [], $lineNumber, 'variable');
+		}
+		if ($this -> ImportHandler -> isImporting($currentLine) && empty($return)) {
+			$return = $this -> executiveParts($currentLine, $oldcurrentline, [], $lineNumber, 'importing');
 		}
 
 		return $return ?? null;

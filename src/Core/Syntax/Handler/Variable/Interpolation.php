@@ -112,9 +112,9 @@ class Interpolation {
 				$variable = str_replace(' ', '', trim($this -> removeBraces($match[0])));
 				$currentVariable = $variable;
 				
-				if (count(explode(self::PATH_SEPARATOR, $currentVariable)) > 1 && $basePath) {
-					if (explode(self::PATH_SEPARATOR, $currentVariable)[1] === 'self' && $currentVariable[0] === '.') {
-						$currentVariable = ($basePath) . (self::PATH_SEPARATOR . implode(self::PATH_SEPARATOR, array_slice(explode(self::PATH_SEPARATOR, $currentVariable), 2)));
+				if (count(explode(self::PATH_SEPARATOR, $currentVariable)) > 0 && $basePath) {
+					if (explode(self::PATH_SEPARATOR, $currentVariable)[0] === 'self' /* && $currentVariable[0] === '.'*/) {
+						$currentVariable = ($basePath) . (self::PATH_SEPARATOR . implode(self::PATH_SEPARATOR, array_slice(explode(self::PATH_SEPARATOR, $currentVariable), 1)));
 					}
 				}
 

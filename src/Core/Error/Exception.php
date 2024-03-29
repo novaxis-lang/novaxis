@@ -48,7 +48,7 @@ class Exception extends \Exception {
 	 *
 	 * @return string The formatted error message with the line number.
 	 */
-	public function __toString(){
+	public function __toString(): string {
 		  return "Error on line {$this -> line}: {$this -> message}";
 	}
 }

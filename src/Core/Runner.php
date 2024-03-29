@@ -61,12 +61,12 @@ class Runner {
 	 *
 	 * @param string $filename The path to the Novaxis file to be executed.
 	 */
-	public function __construct(?string $filename = null, ?string $source = null) {
+	public function __construct(?string $filename = null, ?string $source = null, string $req_shell_path) {
 		$this -> filename = $filename;
 		$this -> source = $source;
 		$this -> Reader = new Reader($this -> filename, $this -> source);
 		$this -> Translator = new Translator();
-		$this -> Executer = new Executer(new Path, $filename);
+		$this -> Executer = new Executer(new Path, $filename, $req_shell_path);
 		$this -> CommentHandler = new CommentHandler;
 		$this -> VisibilitySyntax = new VisibilitySyntax;
 	}
@@ -93,7 +93,8 @@ class Runner {
 		$firstline = true;
 		$lastline = false;
 		$previousLine = null;
-		
+		$value = array();
+
 		try {
 			foreach ($lines as $lineNumber => $line) {
 				if ($lineNumber == count($lines)) {
@@ -138,7 +139,7 @@ class Runner {
 			
 			// $value = $this -> Executer -> parameter($previousLine, end($lines), null, $firstline);	
 			
-			if (gettype($value) === 'NULL') {
+			if (gettype($value ?? null) === 'NULL') {
 				throw new Exception(null, 0);
 			}
 

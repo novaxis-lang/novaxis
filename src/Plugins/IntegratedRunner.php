@@ -25,9 +25,9 @@ class IntegratedRunner {
      *
      * @param string|null $filename The optional filename for the runner.
      */
-	public function __construct(?string $filename = null) {
+	public function __construct(?string $filename = null, string $req_shell_path) {
 		$this -> filename = $filename;
-		$this -> Runner = new Runner($filename);
+		$this -> Runner = new Runner($filename, null, $req_shell_path);
 	}
 
 	/**
@@ -36,9 +36,9 @@ class IntegratedRunner {
      * @param string|null $source The optional source input.
      * @return mixed The result of the runner execution.
      */
-	public function runner(?string $source = null) {
+	public function runner(?string $source = null, string $req_shell_path) {
 		if ($source) {
-			$this -> Runner = new Runner(null, $source);
+			$this -> Runner = new Runner(null, $source, $req_shell_path);
 		}
 		
 		return $this -> Runner -> execute();

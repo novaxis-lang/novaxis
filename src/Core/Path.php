@@ -2,8 +2,8 @@
 namespace Novaxis\Core;
 
 use Novaxis\Core\Syntax\Token\PathTokens;
-use Novaxis\Core\Syntax\Handler\VariableHandler;
 use Novaxis\Core\Syntax\Handler\Variable\EscapeSequences;
+// use Novaxis\Core\Syntax\Handler\VariableHandler;
 // use Novaxis\Core\Error\InvalidVariableVisibilitySyntaxException;
 
 /**
@@ -33,7 +33,7 @@ class Path {
 	 *
 	 * @var VariableHandler
 	 */
-	private VariableHandler $VariableHandler;
+	// private VariableHandler $VariableHandler;
 
 	/**
 	 * The EscapeSequences object for handling escape sequences in variable values.
@@ -46,7 +46,7 @@ class Path {
 	 * Constructor for the Path class.
 	 */
 	public function __construct() {
-		$this -> VariableHandler = new VariableHandler;
+		// $this -> VariableHandler = new VariableHandler;
 		$this -> EscapeSequences = new EscapeSequences;
 	}
 
@@ -162,7 +162,7 @@ class Path {
 	 * @return string The cleaned path.
 	 */
 	public function clean($path) {
-		$path = preg_replace('#\\'.self::PATH_SEPARATOR.'{2,}#', self::PATH_SEPARATOR, $path); // Regex for PATH_SEPARATOR
+		$path = preg_replace('#\\' .self::PATH_SEPARATOR . '{2,}#', self::PATH_SEPARATOR, $path); // Regex for PATH_SEPARATOR
 		$path = trim($path, self::PATH_SEPARATOR);
 
 		return $path;
@@ -186,6 +186,11 @@ class Path {
 			'value' => $this -> EscapeSequences -> replaceEscapeSequences($value),
 		);
 
+		return $this;
+	}
+
+	public function addItems(array $items) {
+		$this -> items = array_merge($this -> items, $items);
 		return $this;
 	}
 

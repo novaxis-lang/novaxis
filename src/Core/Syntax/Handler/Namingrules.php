@@ -18,6 +18,8 @@ class Namingrules {
 	 */
 	private string $fix_pattern = "/[^a-zA-Z0-9_]/";
 
+	private array $used_names = ["self"];
+
 	/**
 	 * Check if a given input string is a valid name based on the naming rules.
 	 *
@@ -27,7 +29,7 @@ class Namingrules {
 	 * @throws NamingRuleException If $throw is true and validation fails.
 	 */
 	public function isValid(string $input, bool $throw = false): bool {
-		$result = preg_match($this -> pattern, $input) && !empty($input);
+		$result = !in_array(trim($input), $this -> used_names) && preg_match($this -> pattern, $input) && !empty($input);
 		
 		if ($throw && !$result) {
 			throw new NamingRuleException;
