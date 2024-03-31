@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2024-03-31
+
+### Added
+- The ability to select the target language while importing.
+- The ability to import JSON configuration files.
+- The ability to specify Byte datatype values, instead of always converting them to integers.
+
+### Fixed
+- Resolved an issue where comments inside strings were incorrectly treated as comments; they are now correctly counted as part of the string.
+
+### Changed
+- Updated the project logo in the README.md for a refreshed look.
+
 ## [1.7.0-beta] - 2024-03-29
 
 ### Added

@@ -83,6 +83,14 @@ class DatatypeHandler {
 
 			$this -> dataTypeClassConnect = $this -> allConnectedTypes['list'];
 		}
+		else if (strstr(strtolower($datatype), 'byte')) {
+			if (!isset($this -> allConnectedTypes['byte'])) {
+				$this -> allConnectedTypes['byte'] = new $this -> dataTypeMap['byte']();
+			}
+
+			$this -> dataTypeClassConnect = $this -> allConnectedTypes['byte'];
+			$this -> dataTypeClassConnect -> setDatatype($datatype);
+		}
 		else {
 			// Check if the datatype exists in the allConnectedTypes array, if not, create a new instance
 			if (!in_array(strtolower($datatype), array_keys($this -> dataTypeMap))) {

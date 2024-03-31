@@ -120,6 +120,23 @@ class NumberType implements TypesInterface {
 		return $result;
 	}
 
+	public function formatFloatAuto($number) {
+		if ((int) $number == $number) {
+			return sprintf('%d', $number);
+		} else {
+			$numStr = (string)$number;
+			$dotPosition = strpos($numStr, '.');
+			if ($dotPosition !== false) {
+				$decimals = strlen($numStr) - $dotPosition - 1;
+			} else {
+				$decimals = 0;
+			}
+			
+			$format = '%.' . $decimals . 'f';
+			return sprintf($format, $number);
+		}
+	}
+
 	/**
 	 * Converts the current value to a proper number representation.
 	 *

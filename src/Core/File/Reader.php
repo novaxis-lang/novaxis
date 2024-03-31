@@ -23,7 +23,7 @@ class Reader {
 	 *
 	 * @param string $filename The filename of the file to read.
 	 */
-	function __construct(?string $filename = null, ?string $source = null){
+	public function __construct(?string $filename = null, ?string $source = null){
 		$this -> filename = $filename;
 		$this -> source = $source;
 	}
@@ -35,7 +35,7 @@ class Reader {
 	 *
 	 * @return string|false The contents of the file as a string, or false on failure.
 	 */
-	function read(){
+	public function read(){
 		if ($this -> source) {
 			return $this -> source;
 		}

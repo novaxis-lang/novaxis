@@ -17,6 +17,12 @@ class ByteType implements TypesInterface {
 	public $dataTypeName = 'Byte';
 
 	/**
+	 * @var string $datatype The provided datatype string.
+	 */
+	private string $datatype = '';
+	public string $pattern = "/Byte\s*as\s*(Hex|Binary|Unit)/i";
+
+	/**
 	 * Multipliers for converting different byte units to bytes.
 	 *
 	 * This array contains multipliers for various byte units (e.g., KB, MB, GB) to convert them to bytes. The keys represent the unit, and the values represent the corresponding multipliers for the conversion.
@@ -52,6 +58,35 @@ class ByteType implements TypesInterface {
 		$this -> NumberType = new NumberType;
 	}
 
+	public function setDatatype(string $datatype) {
+		$this -> datatype = $datatype;
+
+		return $this;
+	}
+
+	public function getDatatype() {
+		return $this -> datatype;
+	}
+
+	public function isMatchDatatype(string $datatype) {
+		return preg_match($this -> pattern, $datatype);
+	}
+
+	static function isMatchDatatypeStatic(string $datatype) {
+		return preg_match(self::$pattern, $datatype);
+	}
+	
+	public function getFormat() {
+		if (!empty($this -> datatype)) {
+			preg_match($this -> pattern, $this -> datatype, $matches);
+			if (!empty($matches[1])) {
+				return trim($matches[1]);
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Set the value of the Byte.
 	 *
@@ -79,12 +114,42 @@ class ByteType implements TypesInterface {
 	 * @return bool True if the value is valid, false otherwise.
 	 */
 	public function is() {
-		return preg_match("/^(((\d+(\.\d+)?)([YZEPTGMKBp]{1,})|0x[0-9A-Fa-f]+|0b[01]+)(\W|\s){0,}?){0,}$/", $this -> value);
+		return preg_match("/^(((\d+(\.\d+)?)(\s*[YZEPTGMKBp]{1,})|0x\s*[0-9A-Fa-f]+|0b\s*[01]+)(\W|\s){0,}?){0,}$/i", $this -> value);
 		/* return (
 			$this -> isValidBinValue($this -> value)
 			|| $this -> isValidByteValue($this -> value)
 			|| $this -> isValidHexValue($this -> value)
 		); */
+	}
+
+	public function convertIntToUnits($integer) {
+		if ($integer == 0) {
+			return '0 B';
+		}
+		
+		$factor = floor((strlen($integer) - 1) / 3);
+		if ($factor >= 0 && $integer >= 1024) {
+			$unit = array_search(pow(1024, $factor), $this -> multipliers);
+		} else {
+			$unit = 'B';
+		}
+		
+		$value = $integer / $this -> multipliers[$unit];
+		
+		if (isset(explode(".", $value)[1]) && (int) explode(".", $value)[1] != 0) {
+			return sprintf("%s %s", $this -> NumberType -> formatFloatAuto($value), $unit);
+		}
+		else {
+			return sprintf("%d %s", $value, $unit);
+		}	
+	}
+
+	public function convertIntToBinary($integer) {
+		return '0b' . decbin($integer);
+	}
+
+	public function convertIntToHex($integer) {
+		return '0x' . dechex($integer);
 	}
 
 	/**
@@ -106,6 +171,19 @@ class ByteType implements TypesInterface {
 			$this -> value = $this -> NumberType -> calculateResult($this -> value);
 		}
 
+		$format = strtolower(($this -> getFormat()));
+		if ($format == 'unit') {
+			$this -> value = $this -> convertIntToUnits($this -> value);
+		}
+		else if ($format == 'binary') {
+			$this -> value = $this -> convertIntToBinary($this -> value);
+		}
+		else if ($format == 'hex') {
+			$this -> value = $this -> convertIntToHex($this -> value);
+		}
+		else {}
+
+
 		return $this;
 	}
 
@@ -116,7 +194,7 @@ class ByteType implements TypesInterface {
 	 * @return bool True if the value is valid, false otherwise.
 	 */
 	private function isValidByteValue($value) {
-		return preg_match('/^((\d+(\.\d+)?)([YZEPTGMKBp]{1,})(\W|\s){0,}?){0,}$/i', $value);
+		return preg_match('/^((\d+(\.\d+)?)(\s*[YZEPTGMKBp]{1,})(\W|\s){0,}?){0,}$/i', $value);
 	}
 
 	/**
@@ -126,7 +204,7 @@ class ByteType implements TypesInterface {
 	 * @return bool True if the value is valid, false otherwise.
 	 */
 	private function isValidHexValue($value) {
-		return preg_match('/^(0x[0-9A-Fa-f]+(\W|\s){0,}?){0,}$/', $value);
+		return preg_match('/^(0x\s*[0-9A-Fa-f]+(\W|\s){0,}?){0,}$/', $value);
 	}
 	
 	/**
@@ -136,7 +214,7 @@ class ByteType implements TypesInterface {
 	 * @return bool True if the value is valid, false otherwise.
 	 */
 	private function isValidBinValue($value) {
-		return preg_match('/^(0b[01]+(\W|\s){0,}?){0,}$/', $value);
+		return preg_match('/^(0b\s*[01]+(\W|\s){0,}?){0,}$/', $value);
 	}
 	
 	/**
@@ -146,7 +224,7 @@ class ByteType implements TypesInterface {
 	 * @return string The parsed value.
 	 */
 	private function parseHexValue($value) {
-		$value = preg_replace_callback('/0x[0-9A-Fa-f]+/', function ($matches) {
+		$value = preg_replace_callback('/0x\s*[0-9A-Fa-f]+/', function ($matches) {
 			$hex = $matches[0];
 			$decimal = hexdec($hex);
 			return $decimal;
@@ -162,7 +240,7 @@ class ByteType implements TypesInterface {
 	 * @return string The parsed value.
 	 */
 	private function parseBinValue($value) {
-		$value = preg_replace_callback('/0b[01]+/', function ($matches) {
+		$value = preg_replace_callback('/0b\s*[01]+/', function ($matches) {
 			$binary = $matches[0];
 			$decimal = bindec($binary);
 			return $decimal;
@@ -178,9 +256,9 @@ class ByteType implements TypesInterface {
 	 * @return string The parsed value in bytes.
 	 */
 	private function parseByteValue($value) {
-		$value = preg_replace_callback('/(\d+(\.\d+)?)([YZEPTGMKBp]{1,})/i', function ($matches) {
+		$value = preg_replace_callback('/(\d+(\.\d+)?)(\s*[YZEPTGMKBp]{1,})/i', function ($matches) {
 			$numericValue = floatval($matches[1]);
-			$unit = strtoupper($matches[3]);
+			$unit = strtoupper(trim($matches[3]));
 	
 			$decimal = null;
 			if (isset($this -> multipliers[$unit])) {

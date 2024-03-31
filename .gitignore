@@ -1,5 +1,4 @@
-/.vscode
-/vendor
-/sandbox
+/sandbox/
+/vendor/
 
 /composer.lock

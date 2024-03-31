@@ -39,7 +39,7 @@ class CommentHandler {
 	 * @return bool Returns true if the line contains a comment, otherwise false.
 	 */
 	public function is(string $line): bool {
-		return preg_match('/' . $this -> pattern . '/', $line);
+		return preg_match('/' . $this -> pattern . '/', $line) && !preg_match('/\".*?(?<!\\\\)\s*(?:#|\/\/).*?\"/', $line);
 	}
 
 	/**

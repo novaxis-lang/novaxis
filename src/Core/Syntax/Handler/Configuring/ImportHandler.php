@@ -8,6 +8,7 @@ use Novaxis\Core\Error\Exception;
 use Novaxis\Core\Syntax\Token\PathTokens;
 use Novaxis\Core\Syntax\Token\ImportTokens;
 use Novaxis\Core\Error\FileNotFoundException;
+use Novaxis\Core\Syntax\Handler\Configuring\ImportDictFile;
 use Novaxis\Core\Syntax\Handler\Configuring\AliasNamingrules;
 
 class ImportHandler {
@@ -17,8 +18,8 @@ class ImportHandler {
 	private Path $Path;
 	private AliasNamingrules $AliasNamingrules;
 	public string $req_shell_path;
-	public string $pattern = "/^\s*(publicly|privately)?\s*(import)\s{1,}(\"(.*?)\")\s{1,}(as\s{1,}((.{1,})|\?))\s*$/i";
-
+	public string $pattern = "/^\s*(publicly|privately)?\s*(import)\s{1,}(\"(.*?)\")\s{1,}(\-\>\s*(JSON|NOVAXIS|NOV|NVX|YAML|TOML)\s{1,})?(as\s{1,}((.{1,})|\?))\s*$/i";
+	public string $formats_pattern = "/^(JSON|NOVAXIS|NOV|NVX|YAML|TOML)$/i";
 
 	public function __construct(string $req_shell_path) {
 		$this -> Path = new Path;
@@ -56,15 +57,33 @@ class ImportHandler {
 		}
 	}
 
+	public function getTargetFormat(string $line) {
+		preg_match($this -> pattern, $line, $matches);
+		if (isset($matches[6]) && !empty($matches[6])) {
+			return strtoupper($matches[6]);
+		}
+		else {
+			$ext = trim(pathinfo($this -> getTargetFile($line), PATHINFO_EXTENSION));
+			preg_match($this -> formats_pattern, $ext, $matches);
+			if (isset($matches[0]) && !empty($matches[0])) {
+				return strtoupper($ext);
+			}
+			else {
+				// Exception
+				throw new Exception;
+			}
+		}
+	}
+
 	public function getAliasName(string $line) {
 		preg_match($this -> pattern, $line, $matches);
-		if (isset($matches[6])) {
-			$aliasName = $matches[6];
-			if ($aliasName == self::DEFAULT_ALIAS) {
+		if (isset($matches[8])) {
+			$aliasName = $matches[8];
+			if (trim($aliasName) == self::DEFAULT_ALIAS) {
 				$aliasName = $this -> getDefaultAlias($this -> getTargetFile($line));
 			}
 			$this -> isAliasNameValid($aliasName);
-			return $aliasName;
+			return trim($aliasName);
 		}
 		else {
 			// Exception
@@ -80,6 +99,23 @@ class ImportHandler {
 	}
 	
 	public function handle(string $line, $path = null) {
+		$filename = $this -> getTargetFile($line);
+		$format = $this -> getTargetFormat($line);
+		if ($format == "NOVAXIS") {
+			return $this -> NovaxisHandler($line, $path);
+		}
+		else if ($format == "JSON") {
+			$ImportDictFile = new ImportDictFile($filename);
+			$visibility = $this -> isImportingPublicly($line) ? 'PUBLIC' : 'PROTECTED';
+			$data = $ImportDictFile -> handle($visibility, $path . self::PATH_SEPARATOR . $this -> getAliasName($line));
+			return $data;
+		}
+		else {
+			// Exception
+		}
+	}
+
+	public function NovaxisHandler(string $line, $path = null) {
 		$filename = $this -> getTargetFile($line);
 		if (file_exists($filename)) {
 			$Runner = new Runner($filename, null, $this -> req_shell_path);

@@ -19,5 +19,5 @@ class Utils {
 	 * 
 	 * @var string
 	 */
-	const VERSION = "1.7.0-beta";
+	const VERSION = "1.7.0";
 }

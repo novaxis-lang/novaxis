@@ -76,6 +76,8 @@ class AutoType implements TypesInterface {
 	 */
 	private string $sureContainsPattern = '/\(\s*(?!not)([^)]+)\)/i';
 
+	private ByteType $ByteType;
+
 	/**
 	 * AutoType constructor.
 	 *
@@ -203,25 +205,22 @@ class AutoType implements TypesInterface {
 	 * @return $this
 	 */
 	public function selectSureDatatypes() {
-		/* $datatypes = explode(',', $this -> getSureDatatypes());
-
-		$array = array_diff(array_keys(array_map('strtolower', $this -> allTypes)), array_values(array_map(function($value) {
-			return trim(strtolower($value));
-		}, $datatypes)));
-		
-		foreach ($array as $datatype) {
-			unset($this -> allTypes[trim($datatype)]);
-		}
-
-		return $this; */
-
 		$datatypes = explode(',', $this -> getSureDatatypes());
 		$datatypes = array_map(function($value) {
 			return strtolower(trim($value));
 		}, $datatypes);
 		
 		$newAllTypes = [];
+
+		if (!isset($this -> ByteType)) {
+			$this -> ByteType = new ByteType;
+		}
+
 		foreach ($datatypes as $datatype) {
+			if ($this -> ByteType -> isMatchDatatype($datatype)) {
+				$datatypeName = strtolower($this -> ByteType -> dataTypeName);
+				$newAllTypes[$datatypeName] = $this -> allTypes[$datatypeName];
+			}
 			if (isset($this -> allTypes[$datatype])){
 				$newAllTypes[$datatype] = $this -> allTypes[$datatype];
 			}
@@ -230,6 +229,25 @@ class AutoType implements TypesInterface {
 		$this -> allTypes = $newAllTypes;
 		
 		return $this;
+	}
+
+	public function whichSureDatatype(string $datatype) {
+		$datatypes = explode(',', $this -> getSureDatatypes());
+		$datatypes = array_map(function($value) {
+			return strtolower(trim($value));
+		}, $datatypes);
+
+		if (!isset($this -> ByteType)) {
+			$this -> ByteType = new ByteType;
+		}
+
+		foreach ($datatypes as $datatypeKey) {
+			if ($this -> ByteType -> isMatchDatatype($datatypeKey)) {
+				return $datatypeKey;
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -257,8 +275,14 @@ class AutoType implements TypesInterface {
 
 			$typeClassConnected = $this -> allConnectedTypes[$typeClassConnectKey];
 			$typeClassConnected -> setValue($input);
+			if (isset($typeClassConnected -> setDatatype)) {
+				// $typeClassConnected -> setDatatype();
+			}
 
 			if ($typeClassConnected -> is()) {
+				if (strtolower(trim($typeClassConnectKey)) == 'byte' && $this -> whichSureDatatype($typeClassConnectKey)) {
+					$typeClassConnected -> setDatatype($this -> whichSureDatatype($typeClassConnectKey));
+				}
 				$this -> item = array(
 					'datatype' => $typeClassConnected -> dataTypeName,
 					'value' => $typeClassConnected -> convertTo() -> getValue()

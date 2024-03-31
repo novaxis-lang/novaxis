@@ -353,7 +353,7 @@ class Executer {
 
 	public function executiveImporting($currentLine, $oldcurrentline, int $lineNumber) {
 		if ($this -> ImportHandler -> isImporting($currentLine)) {
-			$elements = $this -> ImportHandler -> handle($currentLine, $path = $this -> Path -> clean($this -> Path -> getFullPath()));
+			$elements = $this -> ImportHandler -> handle($currentLine, $this -> Path -> clean($this -> Path -> getFullPath()));
 			$this -> ElementsLines[$this -> Path -> getFullPath()] = array("Import", $this -> ImportHandler -> getTargetFile($currentLine), $currentLine, $oldcurrentline, $lineNumber);
 			$this -> Path -> addItems($elements);
 			return $this -> Path -> getItems();
