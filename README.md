@@ -2,7 +2,7 @@
 > A sleek and efficient programming language. Experience the ease of use with its simple syntax, allowing you to work faster and smarter. Simplify your coding tasks and unleash your creativity with Novaxis.
 
 <p align=center>
-    <img src="images/short-name-part-border-10.png" width=460>
+    <img src="media/short-fullbackground-border-10f.png" width=460>
 </p>
 
 - ⚡ Empower Your Code with Lightning Speed - Speed is of the essence, and Novaxis understands that. Watch your projects leap from concept to reality faster than ever before.
