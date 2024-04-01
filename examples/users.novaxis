@@ -3,7 +3,10 @@ users
 	i1
 		name: "John Doe"
 		email: "john.doe@example.com"
-		roles: ["admin", "user"]
+		roles: [
+			"admin",
+			"user"
+		]
 	i2
 		name: "Jane Smith"
 		email: "jane.smith@example.com"
