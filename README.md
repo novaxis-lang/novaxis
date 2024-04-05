@@ -66,5 +66,6 @@ For bug reports in Novaxis, please visit our [Issues](https://github.com/novaxis
 
 [![TWITTER/X](https://img.shields.io/badge/@naxeion-e05d44?style=for-the-badge&logo=x&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://x.com/naxeion)
 [![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC_BY--NC--ND_4.0-%23E42326.svg?style=for-the-badge&labelColor=181b22)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+[![BUILT WITH PHP](media/built-with-php.svg)](https://php.org)
 
 </div>
