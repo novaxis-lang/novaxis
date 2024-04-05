@@ -5,6 +5,7 @@
 <img src="media/short-fullbackground-border-10f.png" width=460>
 <br><br>
 
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/naxeion/novaxis?style=for-the-badge&logo=git&color=E42326&logoColor=D9E0EE&labelColor=181b22)
 [![LAST COMMIT](https://img.shields.io/github/last-commit/naxeion/novaxis?style=for-the-badge&logo=github&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://github.com/naxeion/Novaxis/pulse/monthly)
 [![RELEASE](https://img.shields.io/github/v/release/naxeion/novaxis?style=for-the-badge&logo=gitbook&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://github.com/naxeion/Novaxis/releases/latest)
 
@@ -25,15 +26,7 @@ For more, refer to the [Documentation](https://novaxis-organization.gitbook.io/n
 - Execute your code with the Novaxis interpreter to see the results.
 
 ## Example code
-
-```YAML
-? auto
-Book
-    title: "On the Origin of Time"
-    author: "Thomas Hertog"
-    publishedYear: 2023
-```
-You can see more examples in [examples directory](examples/).
+You can see the examples in [examples directory](examples/).
 
 ## Documentation
 For comprehensive information on Novaxis's syntax, features, and usage, refer to the [Documentation](https://novaxis-organization.gitbook.io/novaxis-documentation).
@@ -52,9 +45,7 @@ novaxis -f test.novaxis --print
 ```
 
 ## License
-[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC_BY--NC--ND_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)\
 This project is licensed under the [CC BY-NC-ND 4.0](LICENSE), allowing you to use the language.
-
 
 ## Contact Us
 
@@ -71,6 +62,9 @@ For bug reports in Novaxis, please visit our [Issues](https://github.com/novaxis
 #### Happy coding with Novaxis! 🚀
 
 ---
+<div align=center>
 
-[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC_BY--NC--ND_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)\
-Copyright © 2023 Novaxis.
+[![TWITTER/X](https://img.shields.io/badge/@naxeion-e05d44?style=for-the-badge&logo=x&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://x.com/naxeion)
+[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC_BY--NC--ND_4.0-%23E42326.svg?style=for-the-badge&labelColor=181b22)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+</div>
