@@ -3,6 +3,9 @@
 
 <p align=center>
     <img src="media/short-fullbackground-border-10f.png" width=460>
+    <br><br>
+    <img src="https://img.shields.io/github/last-commit/naxeion/novaxis?style=for-the-badge&logo=github&color=E42326&logoColor=D9E0EE&labelColor=181b22"/>
+    <img src="https://img.shields.io/github/v/release/naxeion/novaxis?style=for-the-badge&logo=gitbook&color=E42326&logoColor=D9E0EE&labelColor=181b22"/>
 </p>
 
 - ⚡ Empower Your Code with Lightning Speed - Speed is of the essence, and Novaxis understands that. Watch your projects leap from concept to reality faster than ever before.
