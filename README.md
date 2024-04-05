@@ -1,12 +1,14 @@
 # Novaxis language
 > A sleek and efficient programming language. Experience the ease of use with its simple syntax, allowing you to work faster and smarter. Simplify your coding tasks and unleash your creativity with Novaxis.
 
-<p align=center>
-    <img src="media/short-fullbackground-border-10f.png" width=460>
-    <br><br>
-    <img src="https://img.shields.io/github/last-commit/naxeion/novaxis?style=for-the-badge&logo=github&color=E42326&logoColor=D9E0EE&labelColor=181b22"/>
-    <img src="https://img.shields.io/github/v/release/naxeion/novaxis?style=for-the-badge&logo=gitbook&color=E42326&logoColor=D9E0EE&labelColor=181b22"/>
-</p>
+<div align=center>
+<img src="media/short-fullbackground-border-10f.png" width=460>
+<br><br>
+
+[![LAST COMMIT](https://img.shields.io/github/last-commit/naxeion/novaxis?style=for-the-badge&logo=github&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://github.com/naxeion/Novaxis/pulse/monthly)
+[![RELEASE](https://img.shields.io/github/v/release/naxeion/novaxis?style=for-the-badge&logo=gitbook&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://github.com/naxeion/Novaxis/releases/latest)
+
+</div>
 
 - ⚡ Empower Your Code with Lightning Speed - Speed is of the essence, and Novaxis understands that. Watch your projects leap from concept to reality faster than ever before.
 - 💡 Elegance in Every Line - With syntax that speaks the language of simplicity, Novaxis turns complexity into clarity. It’s time your ideas flowed as freely as they come to you.
