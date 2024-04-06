@@ -31,7 +31,7 @@ class Namingrules {
 	public function isValid(string $input, bool $throw = false): bool {
 		$result = !in_array(trim($input), $this -> used_names) && preg_match($this -> pattern, $input) && !empty($input);
 
-		if ($result && trim($input) == '.') {
+		if ($result && strlen($input) > 0 && count(array_unique(str_split($input))) === 1 && isset($input[0]) && $input[0] == '.') {
 			$result = false;
 		}
 		
