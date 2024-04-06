@@ -102,6 +102,8 @@ class Executer {
      */
 	public ?string $filename;
 
+	private ?int $NestedTabsToBack = null;
+
 	/**
 	 * Constructor for the Executer class.
 	 *
@@ -220,6 +222,10 @@ class Executer {
 		$classDatatype = null;
 
 		if ($this -> ClassHandler -> isClass($currentLine)) {
+			if (substr_count($this -> Path -> clean(trim($currentLine)), '.')) {
+				// Beta :
+				$this -> NestedTabsToBack = substr_count($this -> Path -> clean(trim($currentLine)), '.') + 1;
+			}
 			$tabHandlingExecuteConnection = $this -> Tabs -> execute($this -> ClassHandler, $values["tabHandling"] ?? null, $values["previousLine"] ?? null, $currentLine, $values["nextLine"] ?? null, $values["firstLine"] ?? null, $values["lastLine"] ?? null);
 			if ($tabHandlingExecuteConnection === null) {
 				return $this -> Path -> getItems();
@@ -412,19 +418,19 @@ class Executer {
 			$return = $this -> executiveParts($currentLine, $oldcurrentline, [], $lineNumber, 'listCounter');
 		}
 		
-		if (($tabHandling == 'backward' || $this -> wasInListCounter === true) && empty($return) && $this -> listCounterStarted['started'] != true) {
-			$this -> Path -> backward($this -> Tabs -> getDifferenceNumbers($this -> wasInListCounter === false ? $this -> Tabs -> getTabCountInLine($previousLine) : $this -> listCounterLineTabs, $this -> Tabs -> getTabCountInLine($currentLine)));
+		if (empty($return) && ($tabHandling == 'backward' || $this -> wasInListCounter === true) && $this -> listCounterStarted['started'] != true) {
+			$this -> Path -> backward($this -> NestedTabsToBack + $this -> Tabs -> getDifferenceNumbers($this -> wasInListCounter === false ? $this -> Tabs -> getTabCountInLine($previousLine) : $this -> listCounterLineTabs, $this -> Tabs -> getTabCountInLine($currentLine)));
 			
 			if ($this -> wasInListCounter === true) {
 				$this -> resetListCounterSettings();
 			}
 		}
 		
-		if ($this -> ClassHandler -> isClassBox($currentLine) && empty($return)) {
+		if (empty($return) && $this -> ClassHandler -> isClassBox($currentLine)) {
 			$return = $this -> executiveParts($currentLine, $oldcurrentline, [], $lineNumber, 'classbox');
 		}
 		
-		if ($this -> ClassHandler -> isClass($currentLine) && empty($return)) {
+		if (empty($return) && $this -> ClassHandler -> isClass($currentLine)) {
 			$return = $this -> executiveParts($currentLine, $oldcurrentline, [
 				"tabHandling" => $tabHandling,
 				"previousLine" => $previousLine,
@@ -434,10 +440,10 @@ class Executer {
 			], $lineNumber, 'class');
 		}
 		
-		if ($this -> VariableHandler -> isVariable($currentLine) && empty($return)) {
+		if (empty($return) && $this -> VariableHandler -> isVariable($currentLine)) {
 			$return = $this -> executiveParts($currentLine, $oldcurrentline, [], $lineNumber, 'variable');
 		}
-		if ($this -> ImportHandler -> isImporting($currentLine) && empty($return)) {
+		if (empty($return) && $this -> ImportHandler -> isImporting($currentLine)) {
 			$return = $this -> executiveParts($currentLine, $oldcurrentline, [], $lineNumber, 'importing');
 		}
 
