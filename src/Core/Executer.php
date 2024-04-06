@@ -420,6 +420,10 @@ class Executer {
 		
 		if (empty($return) && ($tabHandling == 'backward' || $this -> wasInListCounter === true) && $this -> listCounterStarted['started'] != true) {
 			$this -> Path -> backward($this -> NestedTabsToBack + $this -> Tabs -> getDifferenceNumbers($this -> wasInListCounter === false ? $this -> Tabs -> getTabCountInLine($previousLine) : $this -> listCounterLineTabs, $this -> Tabs -> getTabCountInLine($currentLine)));
+
+			if ($this -> NestedTabsToBack) {
+				$this -> NestedTabsToBack = null;
+			}
 			
 			if ($this -> wasInListCounter === true) {
 				$this -> resetListCounterSettings();
