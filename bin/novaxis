@@ -34,10 +34,11 @@ else if (isset($options["f"]) || isset($options["filename"])) {
 	$filename = isset($options["f"]) ? $options["f"] : $options["filename"];
 	define('__REQ_DIR__', realpath(trim(shell_exec("pwd")) . "/" . dirname($filename)));
 	$result = null;
-	$start = microtime(true);
+	// $start = microtime(true);
 	$novaxis = new Runner("$filename", null, __REQ_DIR__);
 
 	$execute = $novaxis -> execute(null);
+	// $end = microtime(true);
 	if (isset($options["get"])) {
 		if (isset($execute[0][$options["get"]])) {
 			$result = array($options["get"] => $execute[0][$options["get"]]);
