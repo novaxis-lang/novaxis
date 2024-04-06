@@ -1,8 +1,11 @@
 ? auto (string, number)
 
 # Method 1
-settings.interface.font.style = "Hack"
-settings.interface.font.size = 12
+settings
+	interface
+		font
+			style = "Hack"
+			size = 12
 
 # Method 2
 settings.interface.font
@@ -10,8 +13,5 @@ settings.interface.font
 	size = 12
 
 # Method 3
-settings
-	interface
-		font
-			style = "Hack"
-			size = 12
+settings.interface.font.style = "Hack"
+settings.interface.font.size = 12
