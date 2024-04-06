@@ -9,14 +9,14 @@ class Namingrules {
 	 *
 	 * @var string
 	 */
-	private string $pattern = "/^[a-zA-Z0-9_]*$/";
+	private string $pattern = "/^[a-zA-Z0-9_\.]*$/";
 
 	/**
 	 * Regular expression pattern for fixing the input based on naming rules.
 	 *
 	 * @var string
 	 */
-	private string $fix_pattern = "/[^a-zA-Z0-9_]/";
+	private string $fix_pattern = "/[^a-zA-Z0-9_\.]/";
 
 	private array $used_names = ["self"];
 
@@ -30,6 +30,10 @@ class Namingrules {
 	 */
 	public function isValid(string $input, bool $throw = false): bool {
 		$result = !in_array(trim($input), $this -> used_names) && preg_match($this -> pattern, $input) && !empty($input);
+
+		if ($result && trim($input) == '.') {
+			$result = false;
+		}
 		
 		if ($throw && !$result) {
 			throw new NamingRuleException;
