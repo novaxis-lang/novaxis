@@ -3,8 +3,6 @@ namespace Novaxis\Core;
 
 use Novaxis\Core\Syntax\Token\PathTokens;
 use Novaxis\Core\Syntax\Handler\Variable\EscapeSequences;
-// use Novaxis\Core\Syntax\Handler\VariableHandler;
-// use Novaxis\Core\Error\InvalidVariableVisibilitySyntaxException;
 
 /**
  * The Path class represents a data structure to handle and manipulate hierarchical paths.
@@ -29,13 +27,6 @@ class Path {
 	private array $items = [];
 
 	/**
-	 * Instance of VariableHandler for managing variable's visibility in Novaxis code.
-	 *
-	 * @var VariableHandler
-	 */
-	// private VariableHandler $VariableHandler;
-
-	/**
 	 * The EscapeSequences object for handling escape sequences in variable values.
 	 * 
 	 * @var EscapeSequences
@@ -46,7 +37,6 @@ class Path {
 	 * Constructor for the Path class.
 	 */
 	public function __construct() {
-		// $this -> VariableHandler = new VariableHandler;
 		$this -> EscapeSequences = new EscapeSequences;
 	}
 
