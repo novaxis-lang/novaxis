@@ -1,6 +1,7 @@
 <?php
 namespace Novaxis\Core\Syntax\Handler;
 
+use Novaxis\Core\Error\NamingRuleException;
 use Novaxis\Core\Syntax\Handler\Namingrules;
 use Novaxis\Core\Error\InvalidValueException;
 use Novaxis\Core\Syntax\Token\VariableTokens;
@@ -35,7 +36,7 @@ class VariableHandler {
 			return preg_quote($value);
 		}, self::VISIBILITY_KEYWORDS);
 		
-		$this -> pattern = '/^\s*(' . join('|', array_values($values)) . ')?\s*([A-z0-9_]*)\s*((\?)\s*(.*?)\s*(\((\w|\W){0,}\))?)?\s*(=|:)\s*.+\s*$/i';
+		$this -> pattern = '/^\s*(' . join('|', array_values($values)) . ')?\s*([A-z0-9_\.]*)\s*((\?)\s*(.*?)\s*(\((\w|\W){0,}\))?)?\s*(=|:)\s*.+\s*$/i';
 	}
 
 	/**
