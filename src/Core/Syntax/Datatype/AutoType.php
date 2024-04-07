@@ -298,4 +298,6 @@ class AutoType implements TypesInterface {
 
 		return $this;
 	}
+
+	public function is() {}
 }
