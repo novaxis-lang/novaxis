@@ -5,7 +5,8 @@
 <img src="media/short-fullbackground-border-10f.png" width=460>
 <br><br>
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/naxeion/novaxis?style=for-the-badge&logo=git&color=E42326&logoColor=D9E0EE&labelColor=181b22)
+<!-- ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/naxeion/novaxis?style=for-the-badge&logo=git&color=E42326&logoColor=D9E0EE&labelColor=181b22) -->
+
 [![LAST COMMIT](https://img.shields.io/github/last-commit/naxeion/novaxis?style=for-the-badge&logo=github&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://github.com/naxeion/Novaxis/pulse/monthly)
 [![RELEASE](https://img.shields.io/github/v/release/naxeion/novaxis?style=for-the-badge&logo=gitbook&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://github.com/naxeion/Novaxis/releases/latest)
 
