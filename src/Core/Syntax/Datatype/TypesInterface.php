@@ -22,6 +22,8 @@ interface TypesInterface {
 	*/
 	public function getValue();
 
+	public function is();
+
 	/**
 	* Converts the current value to a proper datatype representation.
 	*/
