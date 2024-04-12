@@ -56,10 +56,11 @@ class StringType implements TypesInterface {
 	 *
 	 * @return bool True if the value is a valid string representation, false otherwise.
 	 */
-	public function is() {
+	public function is(/*bool $autotype = false*/) {
 		if (
 			(is_string($this -> value) && $this -> value[0] == '"' && substr($this -> value, -1) == '"')
 			
+			// if $autotype == false
 			// || is_numeric($this -> value)
 			// || is_bool((bool) $this -> value)
 			) {
