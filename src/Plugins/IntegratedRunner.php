@@ -19,6 +19,8 @@ class IntegratedRunner {
      * @var Runner The Runner instance.
      */
 	public Runner $Runner;
+
+	public string $req_shell_path;
 	
 	/**
      * IntegratedRunner constructor.
@@ -27,7 +29,8 @@ class IntegratedRunner {
      */
 	public function __construct(?string $filename = null, string $req_shell_path) {
 		$this -> filename = $filename;
-		$this -> Runner = new Runner($filename, null, $req_shell_path);
+		$this -> req_shell_path = $req_shell_path;
+		$this -> Runner = new Runner($filename, null, $this -> req_shell_path);
 	}
 
 	/**
@@ -36,9 +39,9 @@ class IntegratedRunner {
      * @param string|null $source The optional source input.
      * @return mixed The result of the runner execution.
      */
-	public function runner(?string $source = null, string $req_shell_path) {
+	public function runner(?string $source = null) {
 		if ($source) {
-			$this -> Runner = new Runner(null, $source, $req_shell_path);
+			$this -> Runner = new Runner(null, $source, $this -> req_shell_path);
 		}
 		
 		return $this -> Runner -> execute();
