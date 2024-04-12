@@ -5,6 +5,7 @@ use Novaxis\Core\Syntax\Token\PathTokens;
 use Novaxis\Core\Syntax\Datatype\ListType;
 use Novaxis\Core\Syntax\Datatype\NumberType;
 use Novaxis\Core\Syntax\Token\VariableTokens;
+use Novaxis\Core\Syntax\Handler\Variable\Indexing;
 use Novaxis\Core\Error\VariableInterpolationException;
 use Novaxis\Core\Error\InterpolationPathNotFoundException;
 use Novaxis\Core\Syntax\Handler\Variable\VisibilitySyntax;
@@ -36,6 +37,8 @@ class Interpolation {
 	 * @var NumberType Holds an instance of the NumberType class.
 	 */
 	private NumberType $NumberType;
+
+	private Indexing $Indexing;
 	
 	/**
 	 * Instance of the VisibilitySyntax class for managing variable visibility styles.
@@ -50,6 +53,7 @@ class Interpolation {
 	public function __construct() {
 		$this -> ListType = new ListType;
 		$this -> NumberType = new NumberType;
+		$this -> Indexing = new Indexing;
 		$this -> VisibilitySyntax = new VisibilitySyntax;
 	}
 	
@@ -111,13 +115,19 @@ class Interpolation {
 
 				$variable = str_replace(' ', '', trim($this -> removeBraces($match[0])));
 				$currentVariable = $variable;
+				$realCurrentVariable = $currentVariable;
+
+				if ($this -> Indexing -> is($currentVariable)) {
+					$this -> Indexing -> setValue($currentVariable);
+					$currentVariable = $this -> Indexing -> getPath();
+					$this -> Indexing -> reset();
+				}
 				
 				if (count(explode(self::PATH_SEPARATOR, $currentVariable)) > 0 && $basePath) {
 					if (explode(self::PATH_SEPARATOR, $currentVariable)[0] === 'self' /* && $currentVariable[0] === '.'*/) {
 						$currentVariable = ($basePath) . (self::PATH_SEPARATOR . implode(self::PATH_SEPARATOR, array_slice(explode(self::PATH_SEPARATOR, $currentVariable), 1)));
 					}
 				}
-
 				
 				if (!isset($jsonData[$currentVariable][$order]) || !isset($jsonData[$currentVariable]['visibility'])) {
 					throw new InterpolationPathNotFoundException("The specified path '{$currentVariable}' does not exist in the data structure.");
@@ -133,12 +143,20 @@ class Interpolation {
 					$value = $this -> ListType -> arrayToString($jsonData[$currentVariable][$order]);
 
 					if (count($jsonData[$currentVariable][$order]) >= 2) {
-						$value = $this -> ListType -> removeFirstAndLastLetter($value);
+						// $value = $this -> ListType -> removeFirstAndLastLetter($value);
 					}
 				} else {
 					$value = strval($jsonData[$currentVariable][$order]);
 				}
 
+				if ($this -> Indexing -> is($realCurrentVariable)) {
+					if (in_array(strtolower($jsonData[$currentVariable]['datatype']), array('string', 'list'))) {
+						$value = $this -> Indexing -> setValue($realCurrentVariable) -> getSlice($value, $jsonData[$currentVariable]['datatype']);
+						if (is_array($value)) {
+							$value = json_encode($value);
+						}
+					}
+				}
 
 				return explode('{', $match[0])[0] . $value . explode('}', $match[0])[1];
 			}, $input);
