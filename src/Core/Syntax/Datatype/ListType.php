@@ -138,6 +138,12 @@ class ListType implements TypesInterface {
 		}
 	
 		$this -> items = $this -> filter($result);
+
+		if (count($this -> items) == 1) {
+			$this -> items = $this -> items[0];
+		}
+
+		if (count($this -> items) > 1) { /* Exception */ }
 		
 		return $this;
 	}
