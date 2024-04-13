@@ -149,7 +149,7 @@ class Indexing {
 			}
 			else {
 				$result = array_slice($value, $firstNumber, $secondNumber - $firstNumber);
-				$result = array_merge($result, [$value[end($result)]]);
+				// $result = array_merge($result, [$value[end($result)]]);
 			}
 
 			return $result;
