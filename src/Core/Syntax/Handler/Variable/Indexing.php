@@ -118,18 +118,22 @@ class Indexing {
 
 	public function getListSlice(array $value): array {
 		$this -> valueExists(true);
+		print_r($this -> getIndex());
 		preg_match($this -> index_declaration_public_pattern, $this -> getIndex(), $matches);
 
 		if (isset($matches[1]) && (!empty($matches[1]) || trim($matches[1]) == '0') && empty($matches[2])) {
 			if (isset($value[trim($matches[1])])) {
-				return [ $value[trim($matches[1])] ];
+				$value = $value[trim($matches[1])];
 			}
 			else if (isset($value[count($value) + trim($matches[1])])) {
-				return [ $value[count($value) + trim($matches[1])] ];
+				$value = $value[count($value) + trim($matches[1])];
 			}
 			else {
 				throw new IndexOutOfRangeException('Index \'' . trim($matches[1]) . '\' out of range.');
 			}
+
+			if (!is_array($value)) { return [ $value ]; }
+			return $value;
 		}
 
 		else if (!empty($matches[2])) {
