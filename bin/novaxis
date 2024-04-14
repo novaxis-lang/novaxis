@@ -20,7 +20,6 @@ use Novaxis\Core\Runner;
 use Novaxis\Config\Utils;
 use Novaxis\Plugins\Translator;
 
-
 $Translator = new Translator();
 $options = getopt("f:v", array("filename:", "get:", "print", "path", "help", "version"));
 
