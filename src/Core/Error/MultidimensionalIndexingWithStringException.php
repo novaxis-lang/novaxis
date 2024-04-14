@@ -1,5 +1,4 @@
 <?php
-
 namespace Novaxis\Core\Error;
 
 use Novaxis\Core\Error\Exception;
