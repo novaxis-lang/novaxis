@@ -1,2 +1,2 @@
 Greeting ? String: "Hello, world!"
-Index ? String: "{Greeting[0:5]}"
+Index ? String: "{Greeting[0:5]}" // Hello
