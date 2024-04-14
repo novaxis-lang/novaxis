@@ -47,9 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.6.3] - 2024-03-25
 
-### Added
-- New example file for Novaxis language, located in the [examples directory](examples/).
-
 ### Fixed
 - Corrected the Makefile issue where it wasn't creating a symlink for bin/novaxis.
 
