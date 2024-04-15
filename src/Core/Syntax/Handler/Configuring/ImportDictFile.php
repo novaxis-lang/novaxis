@@ -7,9 +7,11 @@ use Novaxis\Core\Syntax\Token\PathTokens;
 
 class ImportDictFile {
 	use PathTokens;
+	
 	private Path $Path;
 	private Reader $Reader;
 	public string $filename;
+	
 	public function __construct(string $filename) {
 		$this -> filename = $filename;
 		$this -> Path = new Path;
