@@ -2,3 +2,6 @@ import "config.novaxis" as ?
 Server
 	Username ? String: "{config.server.username}"
 	Password ? String: "{config.server.password}"
+
+import "../composer.json" as ?
+ProjectVersion ? String: "{composer.version}"
