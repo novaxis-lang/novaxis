@@ -3,7 +3,7 @@ server
 	host: "127.0.0.1"
 	username: "user"
 	password: "pass"
-	port: 8080
+	port: [8080, 4444]
 
 database
 	host: "localhost"
