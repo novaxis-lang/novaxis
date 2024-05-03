@@ -1,6 +1,8 @@
 <?php
 namespace Novaxis\Core;
 
+use Exception;
+use Novaxis\Core\Error\ConstantModificationException;
 use Novaxis\Core\Tabs;
 use Novaxis\Core\Syntax\Handler\{
 	ClassHandler,
@@ -154,7 +156,7 @@ class Executer {
 	 */
 	public function isAddingNewItemAllowed($allVariableDetails, $currentLine, $oldcurrentline, int $lineNumber) {
 		if ($this -> MaximumElements -> allowed($this -> Path -> getFullPath())) {
-			$this -> Path -> addItem($allVariableDetails['name'], ucfirst($allVariableDetails['datatype']), $allVariableDetails['value'], $allVariableDetails['visibility']);
+			$this -> Path -> addItem($allVariableDetails['name'], ucfirst($allVariableDetails['datatype']), $allVariableDetails['value'], $allVariableDetails['visibility'], $allVariableDetails['const']);
 			$this -> ElementsLines[$this -> Path -> tempForward($allVariableDetails['name'])] = array("Variable", $allVariableDetails, $currentLine, $oldcurrentline, $lineNumber);
 			$this -> MaximumElements -> loseAChance($this -> Path -> getFullPath());
 		}
@@ -320,7 +322,7 @@ class Executer {
 
 			$this -> DatatypeHandler -> createDatatype($allVariableDetails['datatype'], $allVariableDetails['value']);
 			$allVariableDetails['value'] = $this -> DatatypeHandler -> getValue();
-
+			
 			if ($this -> DatatypeHandler -> getDatatype() === 'Auto') {
 				$autoValues = $this -> DatatypeHandler -> getDatatypeConnection() -> getItem();
 				
@@ -328,6 +330,11 @@ class Executer {
 				$allVariableDetails['value'] = $autoValues['value'];
 			}
 			
+			$var_path = $this -> Path -> clean($this -> Path -> getFullPath() . '.' . $allVariableDetails['name']);
+			if (isset($this -> Path -> getItems()[$var_path]) && isset($this -> Path -> getItems()[$var_path]['const']) && $this -> Path -> getItems()[$var_path]['const'] == true) {
+				throw new ConstantModificationException;
+			}
+
 			$this -> isAddingNewItemAllowed($allVariableDetails, $currentLine, $oldcurrentline, $lineNumber);
 			return $this -> Path -> getItems();
 		}
@@ -374,6 +381,7 @@ class Executer {
 	 * @return array|null An associative array containing the results of executed code parts.
 	 */
 	public function executiveParts($currentLine, $oldcurrentline, ?array $values = [], int $lineNumber, string $mode) {
+		// {switch}
 		if ($mode == 'listCounter') {
 			return $this -> executiveListCounter($currentLine, $oldcurrentline, $lineNumber);
 		} elseif ($mode == 'variable') {
