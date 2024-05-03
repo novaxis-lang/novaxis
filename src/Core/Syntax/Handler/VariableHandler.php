@@ -11,6 +11,17 @@ use Novaxis\Core\Syntax\Token\VariableTokens;
 class VariableHandler {
 	use VariableTokens;
 
+	// Public pattern
+	const PUBLIC_VISIBILITY    = 0x02;
+	const PUBLIC_CONSTANT      = 0x03;
+	const PUBLIC_VARIABLE_NAME = 0x04;
+	
+	// Sub 1: Value pattern
+	const SUB1_VALUE           = 0x01;
+	
+	// Sub 2: Datatype pattern
+	const SUB2_DATATYPE        = 0x01;
+
 	/**
 	 * The pattern used for variable processing.
 	 *
@@ -35,7 +46,7 @@ class VariableHandler {
 			return preg_quote($value);
 		}, self::VISIBILITY_KEYWORDS);
 		
-		$this -> pattern = '/^\s*(' . join('|', array_values($values)) . ')?\s*([A-z0-9_\.]*)\s*((\?)\s*(.*?)\s*(\((\w|\W){0,}\))?)?\s*(=|:)\s*.+\s*$/i';
+		$this -> pattern = '/^\s*((' . join('|', array_values($values)) . ')\s)?(const\s)?\s*([A-z0-9_\.]*)\s*((\?)\s*(.*?)\s*(\(.*?\))?)?\s*(=|:)\s*.+\s*$/i';
 	}
 
 	/**
@@ -59,7 +70,7 @@ class VariableHandler {
 	 */
 	public function isValidVariableVisibilitySyntax($line = null, $value = null): bool {
 		if (preg_match($this -> pattern, $line, $matches)) {
-			if ($matches[1] && !in_array(ucfirst(strtolower($matches[1])), array_values(self::VISIBILITY_KEYWORDS))) {
+			if ($matches[self::PUBLIC_VISIBILITY] && !in_array(ucfirst(strtolower($matches[self::PUBLIC_VISIBILITY])), array_values(self::VISIBILITY_KEYWORDS))) {
 				return false;
 			}
 		}
@@ -80,11 +91,21 @@ class VariableHandler {
 	 */
 	public function getVariableVisibilitySyntax($line) {
 		if (preg_match($this -> pattern, $line, $matches)) {
-			return !empty(trim($matches[1])) ? self::VISIBILITY_KEYWORDS[trim(strtolower($matches[1]))] : self::VISIBILITY_KEYWORDS['public'];
+			return !empty(trim($matches[self::PUBLIC_VISIBILITY])) ? self::VISIBILITY_KEYWORDS[trim(strtolower($matches[self::PUBLIC_VISIBILITY]))] : self::VISIBILITY_KEYWORDS['public'];
 		}
 		
 		return self::VISIBILITY_KEYWORDS['public'];
-	}	
+	}
+
+	public function isConstant($line): bool {
+		if (preg_match($this -> pattern, $line, $matches)) {
+			if ($matches[self::PUBLIC_CONSTANT] && trim(strtolower($matches[self::PUBLIC_CONSTANT])) == self::CONSTANT) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	/**
 	 * Get the name of a variable.
@@ -97,7 +118,7 @@ class VariableHandler {
 	 */
 	public function getVariableName($line, bool $throw = true) {
 		if (preg_match($this -> pattern, $line, $matches)) {
-			$variableName = trim($matches[2]);
+			$variableName = trim($matches[self::PUBLIC_VARIABLE_NAME]);
 
 			if (!$this -> Namingrules -> isValid($variableName, $throw) && !$throw) {
 				return null;
@@ -122,11 +143,11 @@ class VariableHandler {
 		$pattern = '/(?:\=|\:)\s*(.*?)$/';
 		
 		if (preg_match($pattern, $line, $matches)) {
-			if (trim($matches[1]) == '') {
+			if (trim($matches[self::SUB1_VALUE]) == '') {
 				throw new InvalidValueException;
 			}
 
-			return trim($matches[1]);
+			return trim($matches[self::SUB1_VALUE]);
 		}
 
 		throw new InvalidValueException;
@@ -144,7 +165,7 @@ class VariableHandler {
 		$pattern = '/\?\s*(.*?)(?:\=|;|:|$)/';
 	
 		if (preg_match($pattern, $line, $matches)) {
-			return trim($matches[1]);
+			return trim($matches[self::SUB2_DATATYPE]);
 		}
 	
 		return null;
@@ -164,6 +185,7 @@ class VariableHandler {
 			'name' => $this -> getVariableName($line),
 			'datatype' => $this -> getVariableDatatype($line),
 			'value' => $this -> getVariableValue($line),
+			'const' => $this -> isConstant($line),
 		);
 	}
 
