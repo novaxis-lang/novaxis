@@ -1,2 +1,0 @@
-import "../composer.json" as ?
-ProjectVersion ? String: "{composer.version}"
