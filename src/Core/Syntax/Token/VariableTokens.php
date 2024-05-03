@@ -37,4 +37,6 @@ trait VariableTokens {
 		"private" => "Private",
 		"restricted" => "Restricted",
 	];
+
+	const CONSTANT = 'const';
 }
