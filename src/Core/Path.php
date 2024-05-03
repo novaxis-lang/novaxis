@@ -167,13 +167,14 @@ class Path {
 	 * @param string $visibility The visibility of the item.
 	 * @return $this
 	 */
-	public function addItem(string $name, string $datatype, mixed $value, string $visibility) {
+	public function addItem(string $name, string $datatype, mixed $value, string $visibility, bool $isConst) {
 		$path = $this -> tempForward($name);
 
 		$this -> items[$this -> clean($path)] = array (
 			'visibility' => $visibility,
 			'datatype' => $datatype,
 			'value' => $this -> EscapeSequences -> replaceEscapeSequences($value),
+			'const' => $isConst,
 		);
 
 		return $this;
