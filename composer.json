@@ -3,7 +3,7 @@
 	"description": "A configuration programming language",
 	"type": "library",
 	"license": "CC-BY-NC-ND-4.0",
-	"version": "1.8.0",
+	"version": "1.8.1",
 	"autoload": {
 		"psr-4": {
 			"Novaxis\\": "src/"
