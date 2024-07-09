@@ -33,11 +33,9 @@ You can see the examples in [examples directory](examples/).
 ## Documentation
 For comprehensive information on Novaxis's syntax, features, and usage, refer to the [Documentation](https://novaxis-organization.gitbook.io/novaxis-documentation).
 
-## Install
+## Installation
 ```Shell
-composer require novaxis-language/novaxis
-cd vendor/novaxis-language/novaxis
-make install
+curl -fsSL https://raw.githubusercontent.com/naxeion/novaxis/main/install.sh | bash
 ```
 
 ## Usage
