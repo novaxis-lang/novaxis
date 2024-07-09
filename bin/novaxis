@@ -10,20 +10,24 @@ function requireAutoloader()
     foreach ($autoloadPaths as $path) {
         if (file_exists($path)) {
             require_once $path;
-            break;
+			return true;
         }
     }
+	return false;
 }
-requireAutoloader();
+if (!requireAutoloader()) {
+	echo "Error: Autoloader not found.";
+	die();
+}
 
 use Novaxis\Core\Runner;
 use Novaxis\Config\Utils;
 use Novaxis\Plugins\Translator;
 
 $Translator = new Translator();
-$options = getopt("f:v", array("filename:", "get:", "print", "path", "help", "version"));
+$options = getopt("f:hv", array("filename:", "get:", "print", "path", "help", "version"));
 
-if (isset($options["help"])) {
+if (isset($options["help"]) || isset($options["h"])) {
 	help_message();
 }
 else if (isset($options["version"]) || isset($options["v"]) || empty($options)) {
