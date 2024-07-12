@@ -8,16 +8,16 @@ namespace Novaxis\Config;
  */
 class Utils {
 	/**
-	* The default file format for Novaxis files, which is used when creating or reading files.
+	* The default file extension for Novaxis files, which is used when creating or reading files.
 	*
 	* @var array
 	*/
-	const FILE_FORMAT = ["novaxis", "nov", "nvx"];
+	const FILE_EXTENSION = ["novaxis", "nov", "nvx"];
 
 	/**
 	 * The version number of the software.
 	 * 
 	 * @var string
 	 */
-	const VERSION = "1.8.2";
+	const VERSION = "1.8.3";
 }
