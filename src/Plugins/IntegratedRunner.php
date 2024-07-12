@@ -2,12 +2,12 @@
 namespace Novaxis\Plugins;
 
 use Novaxis\Core\Runner;
-use Novaxis\Core\Executer;
+use Novaxis\Core\Executor;
 
 /**
  * Class IntegratedRunner
  *
- * Represents an integrated runner for handling execution and mediation between Runner and Executer instances.
+ * Represents an integrated runner for handling execution and mediation between Runner and Executor instances.
  */
 class IntegratedRunner {
 	/**
@@ -60,13 +60,13 @@ class IntegratedRunner {
 	}
 
 	/**
-     * Mediates between the IntegratedRunner and Executer instances through the Runner.
+     * Mediates between the IntegratedRunner and Executor instances through the Runner.
      *
-     * @return Executer|null The Executer instance or null if not set.
+     * @return Executor|null The Executor instance or null if not set.
      */
-	public function MediateBetweenExecuter() {
+	public function MediateBetweenExecutor() {
 		if (isset($this -> Runner)) {
-			return $this -> Runner -> MediateBetweenExecuter();
+			return $this -> Runner -> MediateBetweenExecutor();
 		}
 		return null;
 	}
