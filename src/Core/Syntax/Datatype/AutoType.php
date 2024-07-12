@@ -76,6 +76,9 @@ class AutoType implements TypesInterface {
 	 */
 	private string $sureContainsPattern = '/\(\s*(?!not)([^)]+)\)/i';
 
+	/**
+	 * * Instance of ByteType class.
+	 */
 	private ByteType $ByteType;
 
 	/**
@@ -231,6 +234,12 @@ class AutoType implements TypesInterface {
 		return $this;
 	}
 
+	/**
+	 * Determines the specific datatype from "auto sure" datatypes.
+	 *
+	 * @param string $datatype The datatype to check.
+	 * @return string|null The matched datatype or null if none found.
+	 */
 	public function whichSureDatatype(string $datatype) {
 		$datatypes = explode(',', $this -> getSureDatatypes());
 		$datatypes = array_map(function($value) {
@@ -299,5 +308,8 @@ class AutoType implements TypesInterface {
 		return $this;
 	}
 
+	/**
+	 * Placeholder method to check if a datatype is valid.
+	 */
 	public function is() {}
 }
