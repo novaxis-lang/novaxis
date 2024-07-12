@@ -10,7 +10,7 @@
 
 <!-- [![LAST COMMIT](https://img.shields.io/github/last-commit/naxeion/novaxis?style=for-the-badge&logo=github&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://github.com/naxeion/Novaxis/pulse/monthly) -->
 
-[![RELEASE](https://img.shields.io/github/v/release/naxeion/novaxis?style=for-the-badge&logo=gitbook&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://github.com/naxeion/Novaxis/releases/latest)
+[![RELEASE](https://img.shields.io/github/v/release/novaxis-language/novaxis?style=for-the-badge&logo=gitbook&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://github.com/naxeion/Novaxis/releases/latest)
 
 </div>
 
@@ -39,7 +39,7 @@ Currently there are no documents, we are working on building them, but if needed
 ## Installation
 
 ```Shell
-curl -fsSL https://raw.githubusercontent.com/naxeion/novaxis/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/novaxis-language/novaxis/main/install.sh | bash
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ novaxis -f test.novaxis --print
 
 ## License
 
-This project is licensed under the [BSD-3-Clause ](LICENSE), allowing you to use the language.
+This project is licensed under the [BSD-3-Clause](LICENSE), allowing you to use the language.
 
 ## Contact Us
 
@@ -73,7 +73,8 @@ For bug reports in Novaxis, please visit our [Issues](https://github.com/novaxis
 <div align=center>
 
 [![TWITTER/X](https://img.shields.io/badge/@naxeion-e05d44?style=for-the-badge&logo=x&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://x.com/naxeion)
-[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC_BY--NC--ND_4.0-%23E42326.svg?style=for-the-badge&labelColor=181b22)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-[![BUILT IN PHP](https://img.shields.io/badge/BUILT_IN-PHP-%23E42326.svg?style=for-the-badge&labelColor=181b22)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+[![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD--3--Clause-%23E42326.svg?style=for-the-badge&labelColor=181b22)](https://opensource.org/license/bsd-3-clause)
+[![BUILT IN PHP](https://img.shields.io/badge/BUILT_IN-PHP-%23E42326.svg?style=for-the-badge&labelColor=181b22)](https://www.php.net/)
 
 </div>
