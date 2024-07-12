@@ -1,4 +1,5 @@
 # Novaxis language
+
 > A sleek and efficient programming language. Experience the ease of use with its simple syntax, allowing you to work faster and smarter. Simplify your coding tasks and unleash your creativity with Novaxis.
 
 <div align=center>
@@ -20,7 +21,7 @@
 The features listed are just the start. Novaxis offers a world of possibilities, inviting you to explore and uncover its full potential.
 
 ## Getting Started
-For more, refer to the [Documentation](https://novaxis-organization.gitbook.io/novaxis-documentation).
+
 ### To start using Novaxis, follow these simple steps:
 - Install the Novaxis interpreter on your system.
 - Create a new .novaxis or .nov or .nvx file or open an existing one.
@@ -28,40 +29,47 @@ For more, refer to the [Documentation](https://novaxis-organization.gitbook.io/n
 - Execute your code with the Novaxis interpreter to see the results.
 
 ## Example code
+
 You can see the examples in [examples directory](examples/).
 
 ## Documentation
-For comprehensive information on Novaxis's syntax, features, and usage, refer to the [Documentation](https://novaxis-organization.gitbook.io/novaxis-documentation).
+
+Currently there are no documents, we are working on building them, but if needed, you can see existing examples.
 
 ## Installation
+
 ```Shell
 curl -fsSL https://raw.githubusercontent.com/naxeion/novaxis/main/install.sh | bash
 ```
 
 ## Usage
+
 ```
 novaxis --help
 novaxis -f test.novaxis --print
 ```
 
 ## License
-This project is licensed under the [CC BY-NC-ND 4.0](LICENSE), allowing you to use the language.
+
+This project is licensed under the [BSD-3-Clause ](LICENSE), allowing you to use the language.
 
 ## Contact Us
 
-If you have any questions or need assistance, please don't hesitate to contact our support team at [novaxis-language@proton.me](mailto:novaxis-language@proton.me).
+If you have any questions or need assistance, please don't hesitate to contact our support team.
 
-## Feature Requests and Feedback
+<!-- ## Feature Requests and Feedback
 
-Have an idea, feature request, or feedback for Novaxis? Visit our [Canny board](https://novaxis-language.canny.io/novaxis) to submit and vote on ideas, or to leave your feedback.
+Have an idea, feature request, or feedback for Novaxis? Visit our [Canny board](https://novaxis-language.canny.io/novaxis) to submit and vote on ideas, or to leave your feedback. -->
 
 ## Reporting a bug
-For bug reports in Novaxis, please visit our [Issues](https://github.com/novaxis-language/Novaxis/issues) page. Include relevant details for review. Contributions are appreciated.
+
+For bug reports in Novaxis, please visit our [Issues](https://github.com/novaxis-language/novaxis/issues) page. Include relevant details for review. Contributions are appreciated.
 
 
 #### Happy coding with Novaxis! 🚀
 
 ---
+
 <div align=center>
 
 [![TWITTER/X](https://img.shields.io/badge/@naxeion-e05d44?style=for-the-badge&logo=x&color=E42326&logoColor=D9E0EE&labelColor=181b22)](https://x.com/naxeion)
