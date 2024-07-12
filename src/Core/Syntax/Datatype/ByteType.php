@@ -20,6 +20,10 @@ class ByteType implements TypesInterface {
 	 * @var string $datatype The provided datatype string.
 	 */
 	private string $datatype = '';
+
+	/**
+	 * @var string $pattern The regex pattern for matching Byte as Hex, Binary, or Unit.
+	 */
 	public string $pattern = "/Byte\s*as\s*(Hex|Binary|Unit)/i";
 
 	/**
@@ -58,24 +62,51 @@ class ByteType implements TypesInterface {
 		$this -> NumberType = new NumberType;
 	}
 
+	/**
+	 * Set the datatype for the Byte.
+	 *
+	 * @param string $datatype The datatype to set.
+	 * @return $this
+	 */
 	public function setDatatype(string $datatype) {
 		$this -> datatype = $datatype;
-
 		return $this;
 	}
 
+	/**
+	 * Get the datatype of the Byte.
+	 *
+	 * @return string The datatype of the Byte.
+	 */
 	public function getDatatype() {
 		return $this -> datatype;
 	}
 
+	/**
+	 * Check if the provided datatype matches the pattern.
+	 *
+	 * @param string $datatype The datatype to match.
+	 * @return bool True if the datatype matches, false otherwise.
+	 */
 	public function isMatchDatatype(string $datatype) {
 		return preg_match($this -> pattern, $datatype);
 	}
 
+	/**
+	 * Check if the provided datatype matches the pattern in a static context.
+	 *
+	 * @param string $datatype The datatype to match.
+	 * @return bool True if the datatype matches, false otherwise.
+	 */
 	static function isMatchDatatypeStatic(string $datatype) {
 		return preg_match(self::$pattern, $datatype);
 	}
 	
+	/**
+	 * Get the format of the datatype.
+	 *
+	 * @return string|null The format of the datatype, or null if not found.
+	 */
 	public function getFormat() {
 		if (!empty($this -> datatype)) {
 			preg_match($this -> pattern, $this -> datatype, $matches);
