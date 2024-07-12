@@ -2,7 +2,7 @@
 namespace Novaxis\Core;
 
 use Novaxis\Core\Path;
-use Novaxis\Core\Executer;
+use Novaxis\Core\Executor;
 use Novaxis\Core\File\Reader;
 use Novaxis\Plugins\Translator;
 use Novaxis\Core\Error\Exception;
@@ -13,7 +13,7 @@ use Novaxis\Core\Syntax\Handler\Variable\VisibilitySyntax;
  * The Runner class is responsible for executing the Novaxis code stored in a file.
  *
  * This class reads the Novaxis code from a file, processes it line by line, and executes
- * the commands based on the defined syntax. It uses the Executer and Path classes to handle the parsing and execution of the Novaxis code.
+ * the commands based on the defined syntax. It uses the Executor and Path classes to handle the parsing and execution of the Novaxis code.
  */
 class Runner {
 	/**
@@ -35,14 +35,19 @@ class Runner {
 	 */
 	private Reader $Reader;
 
+	/**
+	 * Translates Novaxis code to/from another configuration language.
+	 *
+	 * @var Translator
+	 */
 	private Translator $Translator;
 
 	/**
-	 * An instance of the Executer class for executing Novaxis code.
+	 * An instance of the Executor class for executing Novaxis code.
 	 *
-	 * @var Executer
+	 * @var Executor
 	 */
-	private Executer $Executer;
+	private Executor $Executor;
 
 	/**
 	 * An instance of the VisibilitySyntax class to handle variable's visibility.
@@ -66,7 +71,7 @@ class Runner {
 		$this -> source = $source;
 		$this -> Reader = new Reader($this -> filename, $this -> source);
 		$this -> Translator = new Translator();
-		$this -> Executer = new Executer(new Path, $filename, $req_shell_path);
+		$this -> Executor = new Executor(new Path, $filename, $req_shell_path);
 		$this -> CommentHandler = new CommentHandler;
 		$this -> VisibilitySyntax = new VisibilitySyntax;
 	}
@@ -103,7 +108,7 @@ class Runner {
 				$nextLine = next($lines);
 				$oldline = $line;
 
-				if ($this -> Executer -> hasUnnecessaryLines($line) === true) {
+				if ($this -> Executor -> hasUnnecessaryLines($line) === true) {
 					continue;
 				}
 
@@ -131,13 +136,13 @@ class Runner {
 					}
 				}
 				
-				$value = $this -> Executer -> parameter($previousLine, $line, $oldline, $nextLine, $firstline, $lastline, $lineNumber);
+				$value = $this -> Executor -> parameter($previousLine, $line, $oldline, $nextLine, $firstline, $lastline, $lineNumber);
 				$firstline = false;
 		
 				$previousLine = $line;
 			}
 			
-			// $value = $this -> Executer -> parameter($previousLine, end($lines), null, $firstline);	
+			// $value = $this -> Executor -> parameter($previousLine, end($lines), null, $firstline);
 			
 			if (gettype($value ?? null) === 'NULL') {
 				throw new Exception(null, 0);
@@ -162,21 +167,21 @@ class Runner {
 	}
 
 	/**
-	 * Mediates between the Runner and Executer instances.
+	 * Mediates between the Runner and Executor instances.
 	 *
-	 * @return Executer The Executer instance.
+	 * @return Executor The Executor instance.
 	 */
-	public function MediateBetweenExecuter() {
-		return $this -> Executer;
+	public function MediateBetweenExecutor() {
+		return $this -> Executor;
 	}
 
 	/**
-	 * Mediates between the Runner and Executer's ElementsLines.
+	 * Mediates between the Runner and Executor's ElementsLines.
 	 *
-	 * @return array The ElementsLines from the Executer.
+	 * @return array The ElementsLines from the Executor.
 	 */
 	public function MediateBetweenElementsLines() {
-		return $this -> Executer -> ElementsLines;
+		return $this -> Executor -> ElementsLines;
 	}
 
 	/**
