@@ -180,6 +180,12 @@ class Path {
 		return $this;
 	}
 
+	/**
+	 * Adds multiple items with paths and associated data to the collection.
+	 *
+	 * @param array $items An array of items to add.
+	 * @return $this
+	 */
 	public function addItems(array $items) {
 		$this -> items = array_merge($this -> items, $items);
 		return $this;
