@@ -2,7 +2,7 @@
 namespace Novaxis\Plugins\Controller;
 
 use Novaxis\Core\Path;
-use Novaxis\Core\Executer;
+use Novaxis\Core\Executor;
 use Novaxis\Core\File\Liner;
 use Novaxis\Core\Syntax\Handler\ClassHandler;
 use Novaxis\Core\Error\SetPathNotFoundException;
@@ -15,9 +15,9 @@ class Mediator {
 	private Path $Path;
 
 	/**
-     * @var Executer The Executer instance for handling execution.
+     * @var Executor The Executor instance for handling execution.
      */
-	private Executer $Executer;
+	private Executor $Executor;
 
 	/**
      * @var Liner The Liner instance for working with file lines.
@@ -52,12 +52,12 @@ class Mediator {
 	/**
      * Mediator constructor.
 	 * 
-     * Initializes the Path, Executer, Liner, ClassHandler, and VariableHandler instances.
+     * Initializes the Path, Executor, Liner, ClassHandler, and VariableHandler instances.
      */
-	public function __construct(Executer $Executer) {
-		$filename = $Executer -> filename;
+	public function __construct(Executor $Executor) {
+		$filename = $Executor -> filename;
 		$this -> Path = new Path;
-		$this -> Executer = $Executer;
+		$this -> Executor = $Executor;
 		$this -> Liner = new Liner($filename);
 		$this -> ClassHandler = new ClassHandler;
 		$this -> VariableHandler = new VariableHandler;
@@ -100,7 +100,7 @@ class Mediator {
 	 * @return bool Returns true if the path exists, false otherwise.
 	 */
 	public function isExists() {
-		return in_array($this -> path, array_keys($this -> Executer -> ElementsLines));
+		return in_array($this -> path, array_keys($this -> Executor -> ElementsLines));
 	}
 
 	/**
@@ -118,7 +118,7 @@ class Mediator {
 	 * @return bool Returns true if the path represents a class, false otherwise.
 	 */
 	public function isClass() {
-		return $this -> Executer -> ElementsLines[$this -> Path -> clean($this -> path)][0] == "Class" ? true : false;
+		return $this -> Executor -> ElementsLines[$this -> Path -> clean($this -> path)][0] == "Class" ? true : false;
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Mediator {
 	 * @return bool Returns true if the path represents a variable, false otherwise.
 	 */
 	public function isVariable() {
-		return $this -> Executer -> ElementsLines[$this -> Path -> clean($this -> path)][0] == "Variable" ? true : false;
+		return $this -> Executor -> ElementsLines[$this -> Path -> clean($this -> path)][0] == "Variable" ? true : false;
 	}
 	
 	/**
@@ -136,7 +136,7 @@ class Mediator {
 	 * @return bool Returns true if the path represents a classbox, false otherwise.
 	 */
 	public function isClassbox() {
-		return $this -> Executer -> ElementsLines[$this -> Path -> clean($this -> path)][0] == "Classbox" ? true : false;
+		return $this -> Executor -> ElementsLines[$this -> Path -> clean($this -> path)][0] == "Classbox" ? true : false;
 	}
 
 	/**
@@ -149,7 +149,7 @@ class Mediator {
 	 */
 	public function nameTo(string $name, bool $execute = false) {
 		if ($this -> isset()) {
-			$currentLine = $this -> Executer -> ElementsLines[$this -> path][2];
+			$currentLine = $this -> Executor -> ElementsLines[$this -> path][2];
 
 			if ($this -> isClass()) {
 				$newLine = $this -> ClassHandler -> changeClassName($currentLine, $name);
@@ -173,7 +173,7 @@ class Mediator {
 	 */
 	public function datatypeTo(string $datatype, bool $execute = false) {
 		if ($this -> isset()) {
-			$currentLine = $this -> Executer -> ElementsLines[$this -> path][2];
+			$currentLine = $this -> Executor -> ElementsLines[$this -> path][2];
 
 			if ($this -> isClass()) {
 				$newLine = $this -> ClassHandler -> changeClassDatatype($currentLine, $datatype);
@@ -199,7 +199,7 @@ class Mediator {
 	 */
 	public function valueTo(string $value, bool $execute = false) {
 		if ($this -> isset()) {
-			$currentLine = $this -> Executer -> ElementsLines[$this -> path][3];
+			$currentLine = $this -> Executor -> ElementsLines[$this -> path][3];
 
 			if ($this -> isVariable()) {
 				$newLine = $this -> VariableHandler -> changeVariableValue($currentLine, $value);
@@ -221,7 +221,7 @@ class Mediator {
 	 */
 	private function executeChange(bool $execute, string $newLine) {
 		if ($execute) {
-			return $this -> Liner -> changeLine($this -> Executer -> ElementsLines[$this -> path][4], $newLine);
+			return $this -> Liner -> changeLine($this -> Executor -> ElementsLines[$this -> path][4], $newLine);
 		} elseif (!empty($newLine)) {
 			return $newLine;
 		}
