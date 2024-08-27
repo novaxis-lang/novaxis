@@ -30,7 +30,10 @@ The features listed are just the start. Novaxis offers a world of possibilities,
 
 ## Example code
 
-You can see the examples in [examples directory](examples/).
+```
+You can see the examples in examples directory.
+```
+[examples directory](examples/)
 
 ## Documentation
 
