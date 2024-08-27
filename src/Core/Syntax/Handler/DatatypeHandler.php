@@ -1,13 +1,7 @@
 <?php
 namespace Novaxis\Core\Syntax\Handler;
 
-use Novaxis\Core\Syntax\Datatype\AutoType;
-use Novaxis\Core\Syntax\Datatype\ByteType;
-use Novaxis\Core\Syntax\Datatype\ListType;
-use Novaxis\Core\Syntax\Datatype\NullType;
-use Novaxis\Core\Syntax\Datatype\NumberType;
-use Novaxis\Core\Syntax\Datatype\StringType;
-use Novaxis\Core\Syntax\Datatype\BooleanType;
+use Novaxis\Core\Syntax\Datatype\TypesConf;
 use Novaxis\Core\Error\InvalidDataTypeException;
 use Novaxis\Core\Syntax\Handler\Variable\Interpolation;
 
@@ -21,22 +15,14 @@ class DatatypeHandler {
 	 * @var array
 	 */
 	private $dataTypeMap = [
-		'number' => NumberType::class,
-		'string' => StringType::class,
-		'boolean' => BooleanType::class,
-		'list' => ListType::class,
-		'null' => NullType::class,
-		'none' => NullType::class,
-		'byte' => ByteType::class,
-		'auto' => AutoType::class,
+		'number',
+		'string',
+		'boolean',
+		'list',
+		'null',
+		'byte',
+		'auto',
 	];
-
-	/**
-	 * An associative array that stores all connected types.
-	 *
-	 * @var array
-	 */
-	private array $allConnectedTypes;
 
 	/**
 	 * Connection to the current data type class instance.
@@ -44,6 +30,13 @@ class DatatypeHandler {
 	 * @var object|null
 	 */
 	private ?object $dataTypeClassConnect;
+
+	/**
+	 * The configuration for datatypes.
+	 *
+	 * @var TypesConf
+	 */
+	private TypesConf $TypesConf;
 
 	/**
 	 * Interpolation instance for handling variable interpolation.
@@ -56,7 +49,7 @@ class DatatypeHandler {
 	 * Constructor for the DatatypeHandler class.
 	 */
 	public function __construct() {
-		$this -> allConnectedTypes = [];
+		$this -> TypesConf = new TypesConf;
 		$this -> Interpolation = new Interpolation;
 	}
 
@@ -69,39 +62,21 @@ class DatatypeHandler {
 	 * @throws InvalidDataTypeException If the specified datatype is invalid or not supported.
 	 */
 	public function createDatatype(string $datatype, mixed $value) {
-		if (strstr(strtolower($datatype), 'auto')) {
-			// if (!isset($this -> allConnectedTypes['auto'])) { }
-			$this -> allConnectedTypes['auto'] = new $this -> dataTypeMap['auto']($this -> dataTypeMap);
-
-			$this -> dataTypeClassConnect = $this -> allConnectedTypes['auto'];
+		if ($this -> TypesConf -> conf["AutoType"]["is_datatype"]($datatype)) {
+			$this -> dataTypeClassConnect = $this -> TypesConf -> fit_datatype("AutoType");
 			$this -> dataTypeClassConnect -> setDatatype($datatype);
 		}
-		else if (strstr(strtolower($datatype), 'list')) {
-			if (!isset($this -> allConnectedTypes['list'])) {
-				$this -> allConnectedTypes['list'] = new $this -> dataTypeMap['list']();
-			}
-
-			$this -> dataTypeClassConnect = $this -> allConnectedTypes['list'];
-		}
-		else if (strstr(strtolower($datatype), 'byte')) {
-			if (!isset($this -> allConnectedTypes['byte'])) {
-				$this -> allConnectedTypes['byte'] = new $this -> dataTypeMap['byte']();
-			}
-
-			$this -> dataTypeClassConnect = $this -> allConnectedTypes['byte'];
+		else if ($this -> TypesConf -> conf["ByteType"]["is_datatype"]($datatype)) {
+			$this -> dataTypeClassConnect = $this -> TypesConf -> fit_datatype("ByteType");
 			$this -> dataTypeClassConnect -> setDatatype($datatype);
 		}
 		else {
 			// Check if the datatype exists in the allConnectedTypes array, if not, create a new instance
-			if (!in_array(strtolower($datatype), array_keys($this -> dataTypeMap))) {
+			if (!in_array(strtolower($datatype), $this -> dataTypeMap)) {
 				throw new InvalidDataTypeException;
 			}
 			
-			if (!isset($this -> allConnectedTypes[$datatype])) {
-				$this -> allConnectedTypes[$datatype] = new $this -> dataTypeMap[strtolower($datatype)]();
-			}
-
-			$this -> dataTypeClassConnect = $this -> allConnectedTypes[$datatype];
+			$this -> dataTypeClassConnect = $this -> TypesConf -> fit_datatype($this -> TypesConf -> getKeyByDataTypeName($datatype));
 		}
 
 		// Set value and convert the datatype
