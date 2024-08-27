@@ -17,6 +17,7 @@ class ImportHandler {
 
 	private Path $Path;
 	private AliasNamingrules $AliasNamingrules;
+
 	public string $req_shell_path;
 	public string $pattern = "/^\s*(publicly|privately)?\s*(import)\s{1,}(\"(.*?)\")\s{1,}(\-\>\s*(JSON|NOVAXIS|NOV|NVX|YAML|TOML)\s{1,})?(as\s{1,}((.{1,})|\?))\s*$/i";
 	public string $formats_pattern = "/^(JSON|NOVAXIS|NOV|NVX|YAML|TOML)$/i";
@@ -47,10 +48,19 @@ class ImportHandler {
 		return false;
 	}
 
+	public function checkFileExistence(string $filename): bool {
+		if (!file_exists($filename)) {
+			throw new FileNotFoundException("The file '$filename' to import does not exist.");
+		}
+		return true;
+	}
+
 	public function getTargetFile(string $line) {
 		preg_match($this -> pattern, $line, $matches);
 		if (isset($matches[4])) {
-			return trim($this -> req_shell_path) . "/" . $matches[4];
+			$filename = trim($this -> req_shell_path) . "/" . $matches[4];
+			self::checkFileExistence($filename);
+			return $filename;
 		}
 		else {
 			// Exception
@@ -101,7 +111,8 @@ class ImportHandler {
 	public function handle(string $line, $path = null) {
 		$filename = $this -> getTargetFile($line);
 		$format = $this -> getTargetFormat($line);
-		if ($format == "NOVAXIS") {
+
+		if (in_array($format, array_map('strtoupper', Utils::FILE_EXTENSION))) {
 			return $this -> NovaxisHandler($line, $path);
 		}
 		else if ($format == "JSON") {
@@ -117,26 +128,22 @@ class ImportHandler {
 
 	public function NovaxisHandler(string $line, $path = null) {
 		$filename = $this -> getTargetFile($line);
-		if (file_exists($filename)) {
-			$Runner = new Runner($filename, null, $this -> req_shell_path);
-			if (isset($Runner -> execute(false)[0])) {
-				$data = $Runner -> execute(false)[0];
-				$newData = array();
-				foreach ($data as $key => $value) {
-					if ($this -> isImportingPublicly($line)) {}
-					else if ($this -> isImportingPrivately($line)) {
-						$value["visibility"] = "protected";
-					}
-					$newData[$this -> Path -> clean($path . self::PATH_SEPARATOR . $this -> getAliasName($line) . self::PATH_SEPARATOR . "$key")] = $value;
+		$Runner = new Runner($filename, null, $this -> req_shell_path);
+
+		if (isset($Runner -> execute(false)[0])) {
+			$data = $Runner -> execute(false)[0];
+			$newData = array();
+			foreach ($data as $key => $value) {
+				if ($this -> isImportingPublicly($line)) {}
+				else if ($this -> isImportingPrivately($line)) {
+					$value["visibility"] = "protected";
 				}
-				return $newData;
+				$newData[$this -> Path -> clean($path . self::PATH_SEPARATOR . $this -> getAliasName($line) . self::PATH_SEPARATOR . "$key")] = $value;
 			}
-			else {
-				throw new Exception;
-			}
+			return $newData;
 		}
 		else {
-			throw new FileNotFoundException;
+			throw new Exception;
 		}
 	}
 }
