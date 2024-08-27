@@ -1,7 +1,6 @@
 <?php
 namespace Novaxis\Core;
 
-use Exception;
 use Novaxis\Core\Error\ConstantModificationException;
 use Novaxis\Core\Tabs;
 use Novaxis\Core\Syntax\Handler\{
@@ -101,15 +100,18 @@ class Executor {
 	private bool $wasInListCounter = false;
 
 	/**
-     * @var array Holds information about code elements.
-     */
+	 * @var array Holds information about code elements.
+	 */
 	public array $ElementsLines = [];
 
 	/**
-     * @var string|null The filename associated with the code.
-     */
+	 * @var string|null The filename associated with the code.
+	 */
 	public ?string $filename;
 
+	/**
+	 * @var int|null $NestedTabsToBack
+	 */
 	private ?int $NestedTabsToBack = null;
 
 	/**
@@ -293,7 +295,8 @@ class Executor {
 					"started" => true,
 					"name" => $allVariableDetails['name'],
 					"datatype" => 'List',
-					"visibility" => $allVariableDetails['visibility']
+					"visibility" => $allVariableDetails['visibility'],
+					"const" => $allVariableDetails['const']
 				];
 				
 				return false;
@@ -315,10 +318,10 @@ class Executor {
 	public function executiveVariable($currentLine, $oldcurrentline, int $lineNumber) {
 		if ($this -> VariableHandler -> isVariable($currentLine)) {
 			$allVariableDetails = $this -> VariableHandler -> getAllVariableDetails($currentLine);
-			
+
 			$allVariableDetails['value'] = $this -> CommentHandler -> is($allVariableDetails['value']) ? $this -> CommentHandler -> split($allVariableDetails['value']) : $allVariableDetails['value'];
 			$allVariableDetails['datatype'] = $this -> isInheritanceDatatype($allVariableDetails) ?: $allVariableDetails['datatype'];
-			
+
 			$allVariableDetails['value'] = ($this -> Interpolation -> execute($allVariableDetails['value'], $this -> Path -> getItems(), $this -> Path -> clean($this -> Path -> getFullPath()))) ?: $allVariableDetails['value'];
 			$allVariableDetails['datatype'] = $this -> DatatypeHandler -> datatypeInterpolation($allVariableDetails['datatype'], $this -> Path -> getItems(), $this -> Path -> getFullPath());
 
@@ -328,6 +331,7 @@ class Executor {
 
 			$this -> DatatypeHandler -> createDatatype($allVariableDetails['datatype'], $allVariableDetails['value']);
 			$allVariableDetails['value'] = $this -> DatatypeHandler -> getValue();
+			$allVariableDetails['datatype'] = $this -> DatatypeHandler -> getDatatype();
 			
 			if ($this -> DatatypeHandler -> getDatatype() === 'Auto') {
 				$autoValues = $this -> DatatypeHandler -> getDatatypeConnection() -> getItem();
