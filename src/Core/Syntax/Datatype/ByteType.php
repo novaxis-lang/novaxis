@@ -35,14 +35,10 @@ class ByteType implements TypesInterface {
 	 */
 	public $multipliers = [
 		'B' => 1,
-		'KB' => 1024,
-		'MB' => 1024 * 1024,
-		'GB' => 1024 * 1024 * 1024,
-		'TB' => 1024 * 1024 * 1024 * 1024,
-		'PB' => 1024 * 1024 * 1024 * 1024 * 1024,
-		'EB' => 1024 * 1024 * 1024 * 1024 * 1024 * 1024,
-		'ZB' => 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024,
-		'YB' => 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024,
+		'KB' => 1 << 10,
+		'MB' => 1 << 20,
+		'GB' => 1 << 30,
+		'TB' => 1 << 40,
 	];
 
 	/**
@@ -70,6 +66,7 @@ class ByteType implements TypesInterface {
 	 */
 	public function setDatatype(string $datatype) {
 		$this -> datatype = $datatype;
+
 		return $this;
 	}
 
@@ -145,12 +142,7 @@ class ByteType implements TypesInterface {
 	 * @return bool True if the value is valid, false otherwise.
 	 */
 	public function is() {
-		return preg_match("/^(((\d+(\.\d+)?)(\s*[YZEPTGMKBp]{1,})|0x\s*[0-9A-Fa-f]+|0b\s*[01]+)(\W|\s){0,}?){0,}$/i", $this -> value);
-		/* return (
-			$this -> isValidBinValue($this -> value)
-			|| $this -> isValidByteValue($this -> value)
-			|| $this -> isValidHexValue($this -> value)
-		); */
+		return preg_match("/^(((\d+(\.\d+)?)(\s*[TGMKBp]{1,})|0x\s*[0-9A-Fa-f]+|0b\s*[01]+)(\W|\s){0,}?){0,}$/i", $this -> value);
 	}
 
 	public function convertIntToUnits($integer) {
@@ -202,7 +194,7 @@ class ByteType implements TypesInterface {
 			$this -> value = $this -> NumberType -> calculateResult($this -> value);
 		}
 
-		$format = strtolower(($this -> getFormat()));
+		$format = strtolower($this -> getFormat());
 		if ($format == 'unit') {
 			$this -> value = $this -> convertIntToUnits($this -> value);
 		}
@@ -214,7 +206,6 @@ class ByteType implements TypesInterface {
 		}
 		else {}
 
-
 		return $this;
 	}
 
@@ -224,9 +215,9 @@ class ByteType implements TypesInterface {
 	 * @param mixed $value The value to check.
 	 * @return bool True if the value is valid, false otherwise.
 	 */
-	private function isValidByteValue($value) {
-		return preg_match('/^((\d+(\.\d+)?)(\s*[YZEPTGMKBp]{1,})(\W|\s){0,}?){0,}$/i', $value);
-	}
+	/* private function isValidByteValue($value) {
+		return preg_match('/^((\d+(\.\d+)?)(\s*[TGMKBp]{1,})(\W|\s){0,}?){0,}$/i', $value);
+	} */
 
 	/**
 	 * Check if the value is a valid hexadecimal value.
@@ -234,9 +225,9 @@ class ByteType implements TypesInterface {
 	 * @param mixed $value The value to check.
 	 * @return bool True if the value is valid, false otherwise.
 	 */
-	private function isValidHexValue($value) {
+	/* private function isValidHexValue($value) {
 		return preg_match('/^(0x\s*[0-9A-Fa-f]+(\W|\s){0,}?){0,}$/', $value);
-	}
+	} */
 	
 	/**
 	 * Check if the value is a valid binary value.
@@ -244,9 +235,9 @@ class ByteType implements TypesInterface {
 	 * @param mixed $value The value to check.
 	 * @return bool True if the value is valid, false otherwise.
 	 */
-	private function isValidBinValue($value) {
+	/* private function isValidBinValue($value) {
 		return preg_match('/^(0b\s*[01]+(\W|\s){0,}?){0,}$/', $value);
-	}
+	} */
 	
 	/**
 	 * Parse a hexadecimal value to decimal.
@@ -287,7 +278,7 @@ class ByteType implements TypesInterface {
 	 * @return string The parsed value in bytes.
 	 */
 	private function parseByteValue($value) {
-		$value = preg_replace_callback('/(\d+(\.\d+)?)(\s*[YZEPTGMKBp]{1,})/i', function ($matches) {
+		$value = preg_replace_callback('/(\d+(\.\d+)?)(\s*[TGMKBp]{1,})/i', function ($matches) {
 			$numericValue = floatval($matches[1]);
 			$unit = strtoupper(trim($matches[3]));
 	
