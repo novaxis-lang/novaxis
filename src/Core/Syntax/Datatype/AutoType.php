@@ -1,12 +1,7 @@
 <?php
 namespace Novaxis\Core\Syntax\Datatype;
 
-use Novaxis\Core\Syntax\Datatype\ListType;
-use Novaxis\Core\Syntax\Datatype\NullType;
-use Novaxis\Core\Syntax\Datatype\ByteType;
-use Novaxis\Core\Syntax\Datatype\NumberType;
-use Novaxis\Core\Syntax\Datatype\StringType;
-use Novaxis\Core\Syntax\Datatype\BooleanType;
+use Novaxis\Core\Syntax\Datatype\TypesConf;
 use Novaxis\Core\Syntax\Datatype\TypesInterface;
 use Novaxis\Core\Error\AutotypeConversionException;
 
@@ -45,20 +40,6 @@ class AutoType implements TypesInterface {
 	private array $item;
 
 	/**
-	 * An array containing all the supported datatypes for auto-detection.
-	 *
-	 * @var array
-	 */
-	private array $allTypes;
-
-	/**
-	 * An associative array that stores all connected types.
-	 *
-	 * @var array
-	 */
-	private array $allConnectedTypes;
-
-	/**
 	 * Regular expression pattern for detecting strings with an 'not' keyword.
 	 *
 	 * This pattern is used to identify strings containing the 'not' keyword.
@@ -77,30 +58,20 @@ class AutoType implements TypesInterface {
 	private string $sureContainsPattern = '/\(\s*(?!not)([^)]+)\)/i';
 
 	/**
-	 * * Instance of ByteType class.
+	 * The configuration for datatypes.
+	 *
+	 * @var TypesConf
 	 */
-	private ByteType $ByteType;
+	private TypesConf $TypesConf;
 
 	/**
 	 * AutoType constructor.
 	 *
 	 * Initializes the AutoType class and sets up the supported datatypes.
 	 */
-	public function __construct(?array $dataTypes = []) {
+	public function __construct() {
 		$this -> item = [];
-
-		// if there is a "not" keyword in the value like this "auto (not boolean)",
-		// removing the datatypes that are between () from $this -> allTypes variable
-		$this -> allTypes = [
-			"list"    => $dataTypes['list']    ?? ListType    :: class,
-			"null"    => $dataTypes['null']    ?? NullType    :: class,
-			"byte"    => $dataTypes['byte']    ?? ByteType    :: class,
-			"number"  => $dataTypes['number']  ?? NumberType  :: class,
-			"boolean" => $dataTypes['boolean'] ?? BooleanType :: class,
-			"string"  => $dataTypes['string']  ?? StringType  :: class, // Always the last one
-		];
-
-		$this -> allConnectedTypes = [];
+		$this -> TypesConf = new TypesConf;
 	}
 
 	/**
@@ -159,24 +130,24 @@ class AutoType implements TypesInterface {
 	 *
 	 * @return string The datatypes specified after "not" (e.g., "boolean, number").
 	 */
-	public function getNotDatatypes(){
+	public function getNotDatatypes() {
 		preg_match($this -> notContainsPattern, $this -> datatype, $matches);
 		
 		return isset($matches[1]) ? $matches[1] : '';
+	}
+
+	public function splitNotDatatypes(): array {
+		$datatypes = explode(',', $this -> getNotDatatypes());
+		return $datatypes;
 	}
 
 	/**
 	 * Remove the specified datatypes from consideration after "not" keyword.
 	 */
 	public function removeNotDatatypes() {
-		$datatypes = explode(',', $this -> getNotDatatypes());
-
-		foreach ($datatypes as $datatype) {
+		foreach ($this -> splitNotDatatypes() as $datatype) {
 			$datatype = trim(strtolower($datatype));
-			
-			if (in_array($datatype, array_keys($this -> allTypes))) {
-				unset($this -> allTypes[$datatype]);
-			}
+			$this -> TypesConf -> unset_datatype($datatype);
 		}
 
 		return $this;
@@ -202,61 +173,22 @@ class AutoType implements TypesInterface {
 		return isset($matches[1]) ? $matches[1] : '';
 	}
 
+	public function splitSureDatatypes(): array {
+		$datatypes = explode(',', $this -> getSureDatatypes());
+		$datatypes = array_map(function($value) {
+			return strtolower(trim($value));
+		}, $datatypes);
+		return $datatypes;
+	}
+
 	/**
 	 * Select "auto sure" datatypes by filtering out non-matching datatypes from the list.
 	 *
 	 * @return $this
 	 */
 	public function selectSureDatatypes() {
-		$datatypes = explode(',', $this -> getSureDatatypes());
-		$datatypes = array_map(function($value) {
-			return strtolower(trim($value));
-		}, $datatypes);
-		
-		$newAllTypes = [];
-
-		if (!isset($this -> ByteType)) {
-			$this -> ByteType = new ByteType;
-		}
-
-		foreach ($datatypes as $datatype) {
-			if ($this -> ByteType -> isMatchDatatype($datatype)) {
-				$datatypeName = strtolower($this -> ByteType -> dataTypeName);
-				$newAllTypes[$datatypeName] = $this -> allTypes[$datatypeName];
-			}
-			if (isset($this -> allTypes[$datatype])){
-				$newAllTypes[$datatype] = $this -> allTypes[$datatype];
-			}
-		}
-
-		$this -> allTypes = $newAllTypes;
-		
+		$this -> TypesConf -> retain_datatypes($this -> splitSureDatatypes());
 		return $this;
-	}
-
-	/**
-	 * Determines the specific datatype from "auto sure" datatypes.
-	 *
-	 * @param string $datatype The datatype to check.
-	 * @return string|null The matched datatype or null if none found.
-	 */
-	public function whichSureDatatype(string $datatype) {
-		$datatypes = explode(',', $this -> getSureDatatypes());
-		$datatypes = array_map(function($value) {
-			return strtolower(trim($value));
-		}, $datatypes);
-
-		if (!isset($this -> ByteType)) {
-			$this -> ByteType = new ByteType;
-		}
-
-		foreach ($datatypes as $datatypeKey) {
-			if ($this -> ByteType -> isMatchDatatype($datatypeKey)) {
-				return $datatypeKey;
-			}
-		}
-
-		return null;
 	}
 
 	/**
@@ -276,31 +208,30 @@ class AutoType implements TypesInterface {
 		$this -> item = [];
 
 		$input = trim($this -> value);
+		$datatype = $this -> TypesConf -> uni_value_which($input);
+		$datatype_str = null;
 
-		foreach (array_keys($this -> allTypes) as $typeClassConnectKey) {
-			if (!in_array($typeClassConnectKey, array_keys($this -> allConnectedTypes))) {
-				$this -> allConnectedTypes[$typeClassConnectKey] = new $this -> allTypes[$typeClassConnectKey]();
-			}
-
-			$typeClassConnected = $this -> allConnectedTypes[$typeClassConnectKey];
-			$typeClassConnected -> setValue($input);
-			if (isset($typeClassConnected -> setDatatype)) {
-				// $typeClassConnected -> setDatatype();
-			}
-
-			if ($typeClassConnected -> is()) {
-				if (strtolower(trim($typeClassConnectKey)) == 'byte' && $this -> whichSureDatatype($typeClassConnectKey)) {
-					$typeClassConnected -> setDatatype($this -> whichSureDatatype($typeClassConnectKey));
-				}
-				$this -> item = array(
-					'datatype' => $typeClassConnected -> dataTypeName,
-					'value' => $typeClassConnected -> convertTo() -> getValue()
-				);
-				
-				break;
-			}
+		/* datatype matches */
+		$dFits = $this -> TypesConf -> which_fits($this -> splitSureDatatypes(), $input);
+		if (!empty($dFits)) {
+			$datatype = $dFits[0][0];
+			$datatype_str = $dFits[0][1];
 		}
-		
+
+		if ($datatype) {
+			$datatype_connection = $this -> TypesConf -> fit_datatype($datatype); // If not found, an exception will be displayed. 
+			$datatype_connection -> setValue($input);
+			if (method_exists($datatype_connection, 'setDatatype')) {
+				$datatype_connection -> setDatatype($datatype_str ?? $datatype);
+			}
+			$this -> item = array(
+				"datatype" => $this -> TypesConf -> getDataTypeNameByKey($datatype),
+				"value" => $datatype_connection -> convertTo() -> getValue()
+			);
+		}
+
+		$this -> TypesConf -> reset();
+
 		if (empty($this -> item)) {
 			throw new AutotypeConversionException;
 		}
