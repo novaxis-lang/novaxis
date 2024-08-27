@@ -17,7 +17,7 @@ class ConversionErrorException extends Exception {
 	 *
 	 * @var string
 	 */
-	protected $message = 'An error occurred while converting the value to the desired datatype. Please check that the provided value is compatible with the specified datatype.';
+	protected $message = 'An error occurred while converting the value to the desired datatype.';
 
 	/**
 	 * ConversionErrorException constructor.
