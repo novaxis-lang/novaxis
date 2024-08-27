@@ -39,7 +39,7 @@ class NumberType implements TypesInterface {
 	 * @return $this The current NumberType instance.
 	 */
 	public function setValue($input) {
-		$this -> value = $input;
+		$this -> value = trim($input);
 
 		return $this;
 	}
@@ -60,6 +60,8 @@ class NumberType implements TypesInterface {
 	 */
 	public function is() {
 		if (is_string($this -> value)) {
+			$this -> value = trim($this -> value);
+
 			if ($this -> value[0] == '"' && substr($this -> value, -1) == '"') {
 				return false;
 			}
@@ -84,7 +86,7 @@ class NumberType implements TypesInterface {
 		$expressionLanguage = new ExpressionLanguage();
 
 		try {
-			$result = $expressionLanguage -> evaluate(strtolower($input ?? $this -> value));
+			$expressionLanguage -> evaluate(strtolower($input ?? $this -> value));
 		} catch (\Exception $e) {
 			return false;
 		}
