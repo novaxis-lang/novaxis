@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
-function requireAutoloader()
-{
+
+function requireAutoloader() {
     $autoloadPaths = array(
       __DIR__ . '/vendor/autoload.php',
       __DIR__ . '/../vendor/autoload.php',
@@ -15,6 +15,7 @@ function requireAutoloader()
     }
 	return false;
 }
+
 if (!requireAutoloader()) {
 	echo "Error: Autoloader not found.";
 	die();
@@ -25,7 +26,7 @@ use Novaxis\Config\Utils;
 use Novaxis\Plugins\Translator;
 
 $Translator = new Translator();
-$options = getopt("f:hv", array("filename:", "get:", "print", "path", "help", "version"));
+$options = getopt("f:phv", array("filename:", "get:", "print", "path", "help", "version", "pp"));
 
 if (isset($options["help"]) || isset($options["h"])) {
 	help_message();
@@ -34,14 +35,20 @@ else if (isset($options["version"]) || isset($options["v"]) || empty($options)) 
 	version_message();
 }
 else if (isset($options["f"]) || isset($options["filename"])) {
-	$filename = isset($options["f"]) ? $options["f"] : $options["filename"];
-	define('__REQ_DIR__', realpath(trim(shell_exec("pwd")) . "/" . dirname($filename)));
+	$filename = $options["f"] ?? $options["filename"];
 	$result = null;
-	// $start = microtime(true);
-	$novaxis = new Runner("$filename", null, __REQ_DIR__);
+	define('__REQ_DIR__', realpath(trim(shell_exec("pwd")) . "/" . dirname($filename)));
 
-	$execute = $novaxis -> execute(null);
-	// $end = microtime(true);
+	$code = new Runner("$filename", null, __REQ_DIR__);
+	$execute = $code -> execute(null);
+
+	// --pp ref to --print & --path, and removing --pp
+	if(isset($options['pp'])) {
+		unset($options['pp']);
+		$options['print'] = true;
+		$options['path'] = true;
+	}
+
 	if (isset($options["get"])) {
 		if (isset($execute[0][$options["get"]])) {
 			$result = array($options["get"] => $execute[0][$options["get"]]);
@@ -54,7 +61,7 @@ else if (isset($options["f"]) || isset($options["filename"])) {
 			die();
 		}
 	}
-	else if (isset($options["print"])) {
+	else if (isset($options["print"]) || isset($options['p'])) {
 		$value = isset($options['path']) ? 0 : 1;
 		if (isset($execute[$value])) {
 			$result = $execute[$value];
@@ -81,8 +88,9 @@ function help_message() {
 	-f, --filename <file>    Specify the filename to process.
 	    --help               Display this help message and exit.
 	    --get <path>         Print a specific element from the file or configuration.
-	    --print              Print all elements in the file or configuration.
+	-p, --print              Print all elements in the file or configuration.
 	    --path               Print the elements in path format. This option requires either the --print or --get argument to work.
+		--pp                 Refers to --path and --print
 
 	Description:
 	This tool is designed for interacting with configuration files written in Novaxis language. It allows users to retrieve and display configuration elements in various formats. The --path option can be used to enhance the output of --print or --get commands, presenting the configuration elements in a structured path format. Ensure to specify a configuration file with the -f or --filename option before using --get, --print, or --path options.
@@ -94,7 +102,7 @@ function help_message() {
 	novaxis -f config.nov --print
 		Print all elements from 'config.nov'.
 
-	novaxis --filename=config.nov --get username
+	novaxis --filename config.nov --get username
 		Print the 'username' element from 'config.nov'.
 
 	novaxis -f config.nov --print --path
