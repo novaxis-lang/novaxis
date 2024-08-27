@@ -2,7 +2,6 @@
 namespace Novaxis\Plugins;
 
 use Novaxis\Core\Runner;
-use Novaxis\Core\Executor;
 
 /**
  * Class IntegratedRunner
@@ -11,22 +10,25 @@ use Novaxis\Core\Executor;
  */
 class IntegratedRunner {
 	/**
-     * @var string|null The filename associated with the runner.
-     */
+	 * @var string|null The filename associated with the runner.
+	 */
 	public ?string $filename;
 	
 	/**
-     * @var Runner The Runner instance.
-     */
+	 * @var Runner The Runner instance.
+	 */
 	public Runner $Runner;
 
+	/**
+	 * @var string The current directory in shell
+	 */
 	public string $req_shell_path;
 	
 	/**
-     * IntegratedRunner constructor.
-     *
-     * @param string|null $filename The optional filename for the runner.
-     */
+	 * IntegratedRunner constructor.
+	 *
+	 * @param string|null $filename The optional filename for the runner.
+	 */
 	public function __construct(?string $filename = null, string $req_shell_path) {
 		$this -> filename = $filename;
 		$this -> req_shell_path = $req_shell_path;
@@ -34,11 +36,11 @@ class IntegratedRunner {
 	}
 
 	/**
-     * Executes the runner with optional source input.
-     *
-     * @param string|null $source The optional source input.
-     * @return mixed The result of the runner execution.
-     */
+	 * Executes the runner with optional source input.
+	 *
+	 * @param string|null $source The optional source input.
+	 * @return mixed The result of the runner execution.
+	 */
 	public function runner(?string $source = null) {
 		if ($source) {
 			$this -> Runner = new Runner(null, $source, $this -> req_shell_path);
@@ -48,10 +50,10 @@ class IntegratedRunner {
 	}
 
 	/**
-     * Mediates between the IntegratedRunner and Runner instances.
-     *
-     * @return Runner|null The Runner instance or null if not set.
-     */
+	 * Mediates between the IntegratedRunner and Runner instances.
+	 *
+	 * @return Runner|null The Runner instance or null if not set.
+	 */
 	public function MediateBetweenRunner() {
 		if (isset($this -> Runner)) {
 			return $this -> Runner;
@@ -60,10 +62,10 @@ class IntegratedRunner {
 	}
 
 	/**
-     * Mediates between the IntegratedRunner and Executor instances through the Runner.
-     *
-     * @return Executor|null The Executor instance or null if not set.
-     */
+	 * Mediates between the IntegratedRunner and Executor instances through the Runner.
+	 *
+	 * @return Executor|null The Executor instance or null if not set.
+	 */
 	public function MediateBetweenExecutor() {
 		if (isset($this -> Runner)) {
 			return $this -> Runner -> MediateBetweenExecutor();
