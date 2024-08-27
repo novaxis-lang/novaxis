@@ -15,6 +15,13 @@ class Exception {
 	protected $global_message = "Unknown error";
 
 	/**
+	 * The message to print
+	 *
+	 * @var ?string
+	 */
+	protected $message = null;
+
+	/**
 	 * The line number where the exception occurred.
 	 *
 	 * @var int
@@ -31,8 +38,6 @@ class Exception {
 		$this -> line = $line;
 		$this -> message = $message ?? $this -> global_message;
 		$this -> exit();
-
-		# parent::__construct($message ?? $this -> global_message);
 	}
 
 	/**
