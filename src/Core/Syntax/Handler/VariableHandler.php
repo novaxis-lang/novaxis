@@ -46,7 +46,7 @@ class VariableHandler {
 			return preg_quote($value);
 		}, self::VISIBILITY_KEYWORDS);
 		
-		$this -> pattern = '/^\s*((' . join('|', array_values($values)) . ')\s)?(const\s)?\s*([A-z0-9_\.]*)\s*((\?)\s*(.*?)\s*(\(.*?\))?)?\s*(=|:)\s*.+\s*$/i';
+		$this -> pattern = '/^\s*((' . join('|', array_values($values)) . ')\s*)?(const\s)?\s*([A-z0-9_\.]*)\s*((\?)\s*(.*?)\s*(\(.*?\))?)?\s*(=|:)\s*.+\s*$/i';
 	}
 
 	/**
